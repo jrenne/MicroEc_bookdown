@@ -1,0 +1,554 @@
+# Tobit and sample-selection models
+
+## Tobit models {#tobit}
+
+In some situations, the dependent variable is incompletely observed, which may result in a non-representative sample. Typically, in some cases, observations of the dependent variable can have a lower and/or an upper limit, while the "true", underlying, dependent variable has not. In this case, OLS regression may lead to inconsistent parameter estimates. 
+
+Tobit models have been designed to address some of these situations. This approach has been named after James Tobin, who developed this model in the late 50s (see @Tobin_1956).
+
+Figure \@ref(fig:tobit1) illustrates the situation. The dots (white and black) represent the "true" observations. Now, assume that only the black are observed. If ones uses these observations in an OLS regression to estimate the relatonship between $x$ and $y$, then one gets the red line. It is clear that the sensitivity of $y$ to $x$ is then underestimated. The blue line is the line one would obtain if white dots were also observed; the grey line represents the model used to genrate the data ($y_i=x_i+\varepsilon_i$).
+
+```{r tobit1, echo=FALSE, fig.cap="Bias in the case of sample selection. The grey line represents the population regression line. The model is $y_i = x_i + \\varepsilon_i$, with $\\varepsilon_{i,t} \\sim \\mathcal{N}(0,1)$. The red line is the OLS regression line based on black dots only.", fig.align = 'left-aligned'}
+beta <- 1
+sigma <- 1
+N <- 100
+eps <- rnorm(N) * sigma
+x <- rnorm(N)
+y <- beta * x + eps
+indic.y.positive <- which(y>0)
+y.positive <- y[indic.y.positive]
+x.positive <- x[indic.y.positive]
+model1 <- lm(y~x)
+model2 <- lm(y.positive~x.positive)
+new <- data.frame(x = seq(-3, 3, by = .01))
+conf_interval.1 <- predict(model1,
+                           newdata=new,
+                           interval="confidence",
+                           level = 0.95)
+new <- data.frame(x.positive = seq(-3, 3, by = .01))
+conf_interval.2 <- predict(model2,
+                           newdata=new,
+                           interval="confidence",
+                           level = 0.95)
+par(plt=c(.15,.95,.2,.95))
+plot(x,y,pch=1,las=1)
+points(x.positive,y.positive,pch=19)
+abline(h=0)
+lines(c(-10,10),beta*c(-10,10),col="grey",lwd=2)
+abline(model1,col="blue",lwd=2)
+abline(model2,col="red",lwd=2)
+lines(new$x, conf_interval.1[,2], col="blue", lty=2)
+lines(new$x, conf_interval.1[,3], col="blue", lty=2)
+lines(new$x, conf_interval.2[,2], col="red",  lty=2)
+lines(new$x, conf_interval.2[,3], col="red",  lty=2)
+```
+
+
+Assume that the (partially) observed dependent variable follows:
+$$
+y^* = \boldsymbol\beta'\bv{x} + \varepsilon,
+$$
+with $\varepsilon$ is drawn from a distribution characterized by a p.d.f. denoted by $f_{\boldsymbol\gamma}^*$ and a c.d.f. denoted by $F_{\boldsymbol\gamma}^*$; these functions depend on a vector of parameters $\boldsymbol{\gamma}$.
+
+The observed dependent variable is:
+\begin{eqnarray*}
+\mbox{Censored case:}&&y = \left\{
+\begin{array}{ccc}
+y^* &if& y^*>L \\
+L &if& y^*\le L,
+\end{array}
+\right.\\
+\mbox{Truncated case:}&&y = \left\{
+\begin{array}{ccc}
+y^* &if& y^*>L \\
+- &if& y^*\le L,
+\end{array}
+\right.
+\end{eqnarray*}
+where "$-$" stands for missing observations.
+
+This formulation is easily extended to censoring from above ($L \rightarrow U$), or censoring from both below and above.
+
+The model parameters are gathered in vector $\theta = [\boldsymbol\beta',\boldsymbol\gamma']'$. Let us write the conditional p.d.f. of the observed variable:
+\begin{eqnarray*}
+\mbox{Censored case:}&& f(y|\bv{x};\theta) = \left\{
+\begin{array}{ccc}
+f_{\boldsymbol\gamma}^*(y -  \boldsymbol\beta'\bv{x}) &if& y>L \\
+F_{\boldsymbol\gamma}^*(L-  \boldsymbol\beta'\bv{x}) &if& y = L,
+\end{array}
+\right.\\
+\mbox{Truncated case:}&&  f(y|\bv{x};\theta) =
+\dfrac{f_{\boldsymbol\gamma}^*(y -  \boldsymbol\beta'\bv{x})}{1 - F_{\boldsymbol\gamma}^*(L-  \boldsymbol\beta'\bv{x})} \quad \mbox{with} \quad y>L.
+\end{eqnarray*}
+
+The (conditional) log-likelihood function is then given by:
+$$
+\log \mathcal{L}(\theta;\bv{y},\bv{X}) = \sum_{i=1}^n \log f(y_i|\bv{x}_i;\theta).
+$$
+In the censored case, we have:
+\begin{eqnarray*}
+\log \mathcal{L}(\theta;\bv{y},\bv{X}) &=& \sum_{i=1}^n \left\{
+\mathbb{I}_{\{y_i=L\}}\log\left[F_{\boldsymbol\gamma}^*(L-  \boldsymbol\beta'\bv{x}_i)\right] + \right.\\
+&& \left. \mathbb{I}_{\{y_i>0\}} \log \left[f_{\boldsymbol\gamma}^*(y_i -  \boldsymbol\beta'\bv{x}_i)\right]\right\}.
+\end{eqnarray*}
+
+
+The Tobit, or censored/truncated normal regression model, corresponds to the case described above, but with Gaussian errors $\varepsilon$. Specifically:
+$$
+y^* = \boldsymbol\beta'\bv{x} + \varepsilon,
+$$
+with $\varepsilon \sim \,i.i.d.\,\mathcal{N}(0,\sigma^2)$  ($\Rightarrow$ $\boldsymbol\gamma = \sigma^2$).
+
+Without loss of generality, we can assume that $L=0$. (One can shift observed data if necessary.)
+
+* The censored density (with $L=0$) is given by:
+$$
+f(y) = \left[
+\frac{1}{\sqrt{2 \pi \sigma^2}}\exp\left(-\frac{1}{2 \sigma^2}(y - \boldsymbol\beta'\bv{x})^2\right)
+\right]^{\mathbb{I}_{\{y>0\}}}
+\left[
+1 - \Phi\left(\frac{\boldsymbol\beta'\bv{x}}{\sigma}\right)
+\right]^{\mathbb{I}_{\{y=0\}}}.
+$$
+
+* The truncated density (with $L=0$) is given by:
+$$
+f(y) = \frac{1}{\Phi(\boldsymbol\beta'\bv{x})}
+\frac{1}{\sqrt{2 \pi \sigma^2}}\exp\left(-\frac{1}{2 \sigma^2}(y - \boldsymbol\beta'\bv{x})^2\right).
+$$
+
+
+Results usually heavily rely on distributional assumptions (more than in uncensored/untruncated case). The framework is easy to extend to an heteroskedastic case, for instance by setting $\sigma_i^2=\exp(\alpha'\bv{x}_i)$. Such a situation is illustrated by Figure \@ref(fig:tobit2).
+
+
+```{r tobit2, echo=FALSE, fig.cap="Censored dataset with heteroskedasticitiy. The model is $y_i = x_i + \\varepsilon_i$, with $\\varepsilon_{i,t} \\sim \\mathcal{N}(0,\\sigma_i^2)$ where $\\sigma_i = \\exp(-1 + x_i)$.", fig.align = 'left-aligned'}
+alpha.0 <- -1
+alpha.1 <- 1
+x <- rnorm(N)
+sigma <- exp(alpha.0+alpha.1*x)
+eps <- rnorm(N) * sigma
+y <- beta * x + eps
+indic.y.positive <- which(y>0)
+y.positive <- y[indic.y.positive]
+x.positive <- x[indic.y.positive]
+model1 <- lm(y~x)
+model2 <- lm(y.positive~x.positive)
+new <- data.frame(x = seq(-3, 3, by = .01))
+conf_interval.1 <- predict(model1,
+                           newdata=new,
+                           interval="confidence",
+                           level = 0.95)
+new <- data.frame(x.positive = seq(-3, 3, by = .01))
+conf_interval.2 <- predict(model2,
+                           newdata=new,
+                           interval="confidence",
+                           level = 0.95)
+par(plt=c(.15,.95,.2,.95))
+plot(x,y,pch=1,las=1)
+points(x.positive,y.positive,pch=19)
+abline(h=0)
+lines(c(-10,10),beta*c(-10,10),col="grey",lwd=2)
+abline(model1,col="blue",lwd=2)
+abline(model2,col="red",lwd=2)
+lines(new$x, conf_interval.1[,2], col="blue", lty=2)
+lines(new$x, conf_interval.1[,3], col="blue", lty=2)
+lines(new$x, conf_interval.2[,2], col="red",  lty=2)
+lines(new$x, conf_interval.2[,3], col="red",  lty=2)
+```
+
+
+
+Let us consider the conditional means of $y$ in the general case, i.e., for any $\varepsilon$ distribution. Assume $\bv{x}$ is observed, such that expectations are conditional on $\bv{x}$.
+
+* For data that are left-truncated at 0, we have:
+\begin{eqnarray*}
+\mathbb{E}(y) &=& \mathbb{E}(y^*|y^*>0) = \underbrace{\boldsymbol\beta'\bv{x}}_{=\mathbb{E}(y^*)} + \underbrace{\mathbb{E}(\varepsilon|\varepsilon>-\boldsymbol\beta'\bv{x})}_{>0} > \mathbb{E}(y^*).
+\end{eqnarray*}
+
+* Consider data that are left-censored at 0. By Bayes, we have:
+$$
+f_{y^*|y^*>0}(u) = \frac{f_{y^*}(u)}{\mathbb{P}(y^*>0)}\mathbb{I}_{\{u>0\}}.
+$$
+Therefore:
+\begin{eqnarray*}
+\mathbb{E}(y^*|y^*>0) &=& \frac{1}{\mathbb{P}(y^*>0)} \int_{-\infty}^\infty u\, f_{y^*}(u)\mathbb{I}_{\{u>0\}} du \\
+&=&  \frac{1}{\mathbb{P}(y^*>0)} \mathbb{E}(\underbrace{y^*\mathbb{I}_{\{y^*>0\}}}_{=y}),
+\end{eqnarray*}
+and, further:
+\begin{eqnarray*}
+\mathbb{E}(y) &=&  \mathbb{P}(y^*>0)\mathbb{E}(y^*|y^*>0)\\
+&>&  \mathbb{E}(y^*) =  \mathbb{P}(y^*>0)\mathbb{E}(y^*|y^*>0) +  \mathbb{P}(y^*<0)\underbrace{\mathbb{E}(y^*|y^*<0)}_{<0}.
+\end{eqnarray*}
+
+Now, let us come back to the Tobit (i.e., Gaussian case) case.
+
+* For data that are left-truncated at 0:
+\begin{eqnarray}
+\mathbb{E}(y) &=& \boldsymbol\beta'\bv{x} + \mathbb{E}(\varepsilon|\varepsilon>-\boldsymbol\beta'\bv{x}) \nonumber\\
+&=&  \boldsymbol\beta'\bv{x} + \sigma \underbrace{\frac{\phi(\boldsymbol\beta'\bv{x}/\sigma)}{\Phi(\boldsymbol\beta'\bv{x}/\sigma)}}_{=: \lambda(\boldsymbol\beta'\bv{x}/\sigma)} = \sigma \left( \frac{\boldsymbol\beta'\bv{x}}{\sigma} + \lambda\left(\frac{\boldsymbol\beta'\bv{x}}{\sigma}\right)\right). (\#eq:Econdtruncated)
+\end{eqnarray}
+where the penultimate line is obtained by using Eq. \@ref(eq:Etrunc).
+
+* For data that are left-censored at 0:
+\begin{eqnarray*}
+\mathbb{E}(y) &=&  \mathbb{P}(y^*>0)\mathbb{E}(y^*|y^*>0)\\
+&=&  \Phi\left( \frac{\boldsymbol\beta'\bv{x}}{\sigma}\right) \sigma \left(
+\frac{\boldsymbol\beta'\bv{x}}{\sigma} +   \lambda\left(\frac{\boldsymbol\beta'\bv{x}}{\sigma}\right)
+\right).
+\end{eqnarray*}
+
+```{r tobit3, echo=FALSE, fig.cap="Conditional means of $y$ in Tobit models. The model is $y_i = x_i + \\varepsilon_i$, with $\\varepsilon_i \\sim \\mathcal{N}(0,1)$.", fig.align = 'left-aligned'}
+x <- seq(-4,4,by=.01)
+par(plt=c(.15,.95,.15,.95))
+plot(x,x + dnorm(x)/pnorm(x),las=1,type="l",lwd=2,ylab="E(y|x)",ylim=c(0,4))
+lines(x,pnorm(x)*(x + dnorm(x)/pnorm(x)),lwd=2,lty=3)
+grid()
+lines(c(-10,10),c(-10,10),col="grey")
+legend("topleft", # places a legend at the appropriate place 
+       c("Truncated","Censored"),
+       lty=c(1,3), # gives the legend appropriate symbols (lines)       
+       lwd=c(2,2), # line width
+       col=c("black"), # gives the legend lines the correct color and width
+       #pch = c(3,NaN,NaN),#symbols,
+       bg="white",
+       seg.len = 4,
+       bty="n"
+)
+```
+
+
+
+<!-- %\begin{frame}{Tobit Model} -->
+<!-- %\begin{footnotesize} -->
+<!-- %\begin{itemize} -->
+<!-- %	\item It is easily seen that: -->
+<!-- %	$$ -->
+<!-- %	\mathbb{P}(y^* \le 0) =  \Phi\left(-\frac{\boldsymbol\beta'\bv{x}}{\sigma}\right) = 1 - \Phi\left(\frac{\boldsymbol\beta'\bv{x}}{\sigma}\right). -->
+<!-- %	$$ -->
+<!-- %	\item If $y=0$ when $y^*<0$, then the p.d.f. of $y$ therefore is: -->
+<!-- %	$$ -->
+<!-- %	f(y) = \left[1 - \Phi\left(\frac{\boldsymbol\beta'\bv{x}}{\sigma}\right)\right]^{\mathbb{I}_{\{y=0\}}} -->
+<!-- %	\left[\frac{1}{\sqrt{2\pi \sigma^2}}\exp\left(-\frac{(y - \boldsymbol\beta'\bv{x})}{2\sigma^2}\right)\right]^{\mathbb{I}_{\{y>0\}}}. -->
+<!-- %	$$ -->
+<!-- %	\item The log-likelihood function is: -->
+<!-- %	\begin{eqnarray*} -->
+<!-- %	\log \mathcal{L}(\boldsymbol\beta,\sigma^2;\bv{y},\bv{X}) &=& \sum_{i=1}^n \left\{ -->
+<!-- %	\mathbb{I}_{\{y_i=0\}}\log\left[1 - \Phi\left(\frac{\boldsymbol\beta'\bv{x}_i}{\sigma}\right)\right] + \right.\\ -->
+<!-- %	&& \left. \mathbb{I}_{\{y_i>0\}} \log \left[\frac{1}{\sqrt{2\pi \sigma^2}}\exp\left(-\frac{(y_i - \boldsymbol\beta'\bv{x}_i)}{2\sigma^2}\right)\right]\right\}. -->
+<!-- %	\end{eqnarray*} -->
+<!-- %\end{itemize} -->
+<!-- %\end{footnotesize} -->
+<!-- %\end{frame} -->
+
+
+**Heckit regression**
+
+The previous formula (Eq. \@ref(eq:Econdtruncated)) can in particular be used in an alternative estimation approach, namely the Heckman two-step estimation. This approach is based on two steps:[^FootnoteHeckit1]
+
+[^FootnoteHeckit1]: See 16.10.2 of @Cameron_Trivedi_2005 for the derivation of asymptotic standard errors of $\boldsymbol\beta$.
+
+1. Using the complete sample, fit a Probit model of $\mathbb{I}_{\{y_i>0\}}$ on $\bv{x}$. This provides a consistent estimate of $\frac{\boldsymbol\beta}{\sigma}$, and therefore of $\lambda(\boldsymbol\beta'\bv{x}/\sigma)$. (Indeed, if $z_i \equiv \mathbb{I}_{\{y_i>0\}}$, then $\mathbb{P}(z_i=1|\bv{x}_i;\boldsymbol\beta/\sigma)=\Phi(\boldsymbol\beta'\bv{x}_i/\sigma)$.)
+
+2. Using the truncated sample only: run an OLS regression of $\bv{y}$ on $\left\{\bv{x},\lambda(\boldsymbol\beta'\bv{x}/\sigma)\right\}$ (having Eq. \@ref(eq:Econdtruncated) in mind). This provides a consistent estimate of $(\boldsymbol\beta,\sigma)$.
+
+The underlying specification is of the form:
+$$
+\mbox{Conditional mean} + \mbox{disturbance}.
+$$
+where "Conditional mean" comes from Eq. \@ref(eq:Econdtruncated) and "disturbance" is an error with zero conditional mean.
+
+This approach is also applied to the case of **sample selection models** (Section \@ref(SSM)).
+
+
+:::{.example #WageMroz1 name="Wage prediction"}
+
+The present example is based on the dataset used in @Mroz_1987 (whicht is part of the `sampleSelection` package).
+
+```{r tobit4, warning=FALSE, message=FALSE}
+library(sampleSelection)
+library(AER)
+data("Mroz87")
+Mroz87$lfp.yesno <- NaN
+Mroz87$lfp.yesno[Mroz87$lfp==1] <- "yes"
+Mroz87$lfp.yesno[Mroz87$lfp==0] <- "no"
+Mroz87$lfp.yesno <- as.factor(Mroz87$lfp.yesno)
+ols <- lm(wage ~ educ + exper + I( exper^2 ) + city,data=subset(Mroz87,lfp==1))
+tobit <- tobit(wage ~ educ + exper + I( exper^2 ) + city,
+               left = 0, right = Inf,
+               data=Mroz87)
+Heckit <- heckit(lfp ~ educ + exper + I( exper^2 ) + city, # selection equation
+                 wage ~ educ + exper + I( exper^2 ) + city, # outcome equation
+                 data=Mroz87 )
+
+stargazer(ols,Heckit,tobit,no.space = TRUE,type="text",omit.stat = "f")
+```
+
+Figure \@ref(fig:tobit5) shows that, low wages, the OLS model tends to over-predict wages. The slope between observed and Tobit-predicted wages is closer to one (the adjustment line is closer to the 45-degree line.)
+
+```{r tobit5, echo=FALSE, fig.cap="Predicted versus observed wages.", fig.align = 'left-aligned'}
+predicted.wage.tobit <- predict(tobit,newdata=Mroz87)
+predicted.wage.OLS <- predict(ols,newdata=Mroz87)
+par(mfrow=c(1,1))
+par(plt=c(.15,.95,.2,.95))
+plot(Mroz87$wage,predicted.wage.tobit,pch=19,
+     xlab="Observed wage",ylab="Predicted wage",col="light grey",
+     ylim=c(min(predicted.wage.OLS,predicted.wage.tobit),
+            max(predicted.wage.OLS,predicted.wage.tobit)))
+grid()
+points(Mroz87$wage,predicted.wage.OLS,col="grey")
+lines(c(-100,100),c(-100,100),lwd=2,col="black")
+abline(lm(predicted.wage.tobit~Mroz87$wage),col="red",lwd=2)
+abline(lm(predicted.wage.OLS~Mroz87$wage),col="blue",lwd=2)
+legend("bottomright",
+       c("Tobit","OLS","pred~obs Tobit","pred~obs OLS"),
+       lty=c(NaN,NaN,1,1), # gives the legend appropriate symbols (lines)
+       lwd=c(2), # line width
+       col=c("grey","light grey","red","blue"), # gives the legend lines the correct color and width
+       pt.bg=c(1),
+       pch = c(19,1,NaN,NaN),#symbols,
+       pt.cex = c(1),
+       bg="white",
+       seg.len = 4
+)
+```
+
+:::
+
+<!-- \begin{frame}{Tobit Model} -->
+<!-- \begin{footnotesize} -->
+<!-- \begin{itemize} -->
+<!-- 	\item Tobit models crucially depend on distributional assumptions. Specification tests, see m-Test (Remark\,\@ref(remark:mTest}). -->
+<!-- 	\item Specific case of (suspected) heteroskedasticity: -->
+<!-- 		$$ -->
+<!-- 		H_0: \,\sigma_i^2=\sigma^2, \qquad \quad H_1:\, \sigma_i^2 = \exp(\bv{x}_i\alpha). -->
+<!-- 		$$ -->
+
+<!-- 	\href{http://cameron.econ.ucdavis.edu/mmabook/mma.html}{Cameron and Trivedi}  (16.3.7) propose an OPG LM test (see Slide\,\@ref(Slide:OPG}), based on the OLS regression: -->
+<!-- 	$$ -->
+<!-- 	1 = \gamma_1 \bv{s}_{i,1} + \gamma_2 \bv{s}_{i,2} + \varepsilon_i, -->
+<!-- 	$$ -->
+<!-- 	where $\bv{s}_{i,1} = \partial \log f(y_i,\boldsymbol\beta,\boldsymbol\alpha)/\partial \boldsymbol\beta$ and $\bv{s}_{i,2} = \partial \log f(y_i,\boldsymbol\beta,\boldsymbol\alpha)/\partial \boldsymbol\alpha$. -->
+
+<!-- 	(The test statistics is $n \times R_u^2$, where $R_u^2$ is the uncentered $R^2$.) -->
+<!-- \end{itemize} -->
+<!-- \end{footnotesize} -->
+<!-- \end{frame} -->
+
+
+**Two-part model**
+
+
+In the standard Tobit framework, the model determining censored ---or truncated--- data *censoring mechanism* is the same as the one determining non-censored ---or observed--- data *outcome mechanism*. A two-part model adds flexibility by permitting the zeros and non-zeros to be generated by different densities. The second model characterizes the outcome *conditional on* the outcome being observed.
+
+In a seminal paper, @Duan_et_al_1983 employ this methodology to account for individual annual hospital expenses. The two models are then as follows:
+
+* $1^{st}$ model: $\mathbb{P}(hosp=1|\bv{x}) =  \Phi(\bv{x}_1'\boldsymbol\beta_1)$,
+* $2^{nd}$ model: $Expense = \exp(\bv{x}_2'\boldsymbol\beta_2 + \eta)$, with $\eta \sim\,i.i.d.\, \mathcal{N}(0,\sigma_2^2)$.
+
+Specifically:
+$$
+\mathbb{E}(Expense|\bv{x}_1,\bv{x}_2) = \Phi(\bv{x}_1'\boldsymbol\beta_1)\exp\left(\bv{x}_2'\boldsymbol\beta_2+ \frac{\sigma_2^2}{2}\right).
+$$
+
+In sample-selection models, studied in the next section, one specifies the joint distribution for the censoring and outcome mechanisms  (while the two parts are independent here).
+
+
+
+
+## Sample Selection Models {#SSM}
+
+
+The situation tackled by sample-selection models is the following. The dependent variable of interest, denoted by $y_2$, depends on observed variables $\bv{x}_2$. Observing $y_2$, or not, depends on the value of a latent variable ($y_1^*$) that is correlated to observed variables $\bv{x}_1$. The difference w.r.t. the two-part model skethed above is that, even conditionally on $(\bv{x}_1,\bv{x}_2)$, $y_1^*$ and $y_2$ may be correlated.
+
+As in the Tobit case, even in the simplest case of population conditional mean linear in regressors (i.e. $y_2 = \bv{x}_2'\boldsymbol\beta_2 + \varepsilon_2$), OLS regression leads to inconsistent parameter estimates because the sample is not representative of the population.
+
+There are two latent variables: $y_1^*$ and $y_2^*$. We observe $y_1$ and, if the considered entity "participates", we also observe $y_2$. More specifically:
+\begin{eqnarray*}
+y_1 &=& \left\{
+\begin{array}{ccc}
+1 &\mbox{if}& y_1^* > 0 \\
+0 &\mbox{if}& y_1^* \le 0
+\end{array}
+\right. \quad \mbox{(participation equation)}\\
+y_2 &=& \left\{
+\begin{array}{ccc}
+y_2^* &\mbox{if}& y_1 = 1 \\
+- &\mbox{if}& y_1 = 0
+\end{array}
+\right. \quad \mbox{(outcome equation).}
+\end{eqnarray*}
+
+Moreover:
+\begin{eqnarray*}
+y_1^* &=& \bv{x}_1'\boldsymbol\beta_1 + \varepsilon_1 \\
+y_2^* &=& \bv{x}_2'\boldsymbol\beta_2 + \varepsilon_2.
+\end{eqnarray*}
+
+Note that the Tobit model (Section \@ref(tobit)) is the special case where $y_1^*=y_2^*$.
+
+Usually:
+$$
+\left[\begin{array}{c}\varepsilon_1\\\varepsilon_2\end{array}\right] \sim \mathcal{N}\left(\bv{0},
+\left[
+\begin{array}{cc}
+1 & \rho  \sigma_2 \\
+\rho  \sigma_2 & \sigma_2^2
+\end{array}
+\right]
+\right).
+$$
+Let us derive the likelihood associated with this model. We have:
+\begin{eqnarray}
+f(\underbrace{0}_{=y_1},\underbrace{-}_{=y_2}|\bv{x};\theta) &=& \mathbb{P}(y_1^*\le 0) = \Phi(-\bv{x}_1'\boldsymbol\beta_1) (\#eq:probaPP1)\\
+f(1,y_2|\bv{x};\theta) &=& f(y_2^*|\bv{x};\theta) \mathbb{P}(y_1^*>0|y_2^*,\bv{x};\theta) \nonumber \\
+&=& \frac{1}{\sigma}\phi\left(\frac{y_2 - \bv{x}_2'\boldsymbol\beta_2}{\sigma}\right)  \mathbb{P}(y_1^*>0|y_2,\bv{x};\theta).(\#eq:probaPP2)
+\end{eqnarray}
+
+Let us compute $\mathbb{P}(y_1^*>0|y_2,\bv{x};\theta)$. By Prop. \@ref(prp:update) (in Appendix \@ref(GaussianVar)), applied to ($\varepsilon_1,\varepsilon_2$), we have:
+$$
+y_1^*|y_2 \sim \mathcal{N}\left(\bv{x}_1'\boldsymbol\beta_1 + \frac{\rho}{\sigma_2}(y_2-\bv{x}_2'\boldsymbol\beta_2),1-\rho^2\right).
+$$
+which leads to
+\begin{equation}
+\mathbb{P}(y_1^*>0|y_2,\bv{x};\theta) = \Phi\left( \frac{\bv{x}_1'\boldsymbol\beta_1 + \dfrac{\rho}{\sigma_2}(y_2-\bv{x}_2'\boldsymbol\beta_2)}{\sqrt{1-\rho^2}}\right).(\#eq:probaPP3)
+\end{equation}
+
+Figure \@ref(fig:SampleSelec) displays $\mathbb{P}(y_1^*>0|y_2,\bv{x};\theta)$ for different values of $y_2$ and of $\rho$, in the case where $\boldsymbol\beta_1=\boldsymbol\beta_2=0$.
+
+```{r SampleSelec, echo=FALSE, fig.cap="Probability of observing $y_2$ depending on its value, for different values of conditional correlation between $y_2$ and $y_1^*$.", fig.align = 'left-aligned'}
+
+rho <- .7
+sigma2 <- 1
+
+par(plt=c(.15,.95,.18,.95))
+all.rhos <- c(-.1,0,.5,.9)
+count <- 0
+for(rho in all.rhos){
+  count <- count + 1
+  x <- seq(-5,5,by=.05)
+  P <- pnorm(rho/sigma2*x/sqrt(1 - rho^2))
+  if(count==1){
+    plot(x,P,type="l",lwd=2,ylim=c(0,1),
+         xlab=expression(y[2]),
+         ylab=expression(paste(P,"(",y[1]^"*",">0|",y[2],")",sep="")))
+    rho.4.legend <- expression(paste(rho,"=",-.1))
+  }else{
+    lines(x,P,type="l",col=count,lwd=2)
+    if(count==2){
+      rho.4.legend <- c(rho.4.legend,expression(paste(rho,"=",0)))
+    }
+    if(count==3){
+      rho.4.legend <- c(rho.4.legend,expression(paste(rho,"=",0.5)))
+    }
+    if(count==4){
+      rho.4.legend <- c(rho.4.legend,expression(paste(rho,"=",0.9)))
+    }
+  }
+  
+  legend("topleft",
+         rho.4.legend,
+         lty=c(1,1), # gives the legend appropriate symbols (lines)
+         lwd=c(2,2), # line width
+         col=1:length(all.rhos), # gives the legend lines the correct color and width
+         bg="white",
+         seg.len = 4
+  )
+}
+```
+
+
+Using Eqs. \@ref(eq:probaPP1), \@ref(eq:probaPP2) and \@ref(eq:probaPP3), one gets the log-likelihood function:
+\begin{eqnarray*}
+\log \mathcal{L}(\theta;\bv{y},\bv{X}) &=& \sum_{i=1}^n  (1 - y_{1,i})\log \Phi(-\bv{x}_{1,i}'\boldsymbol\beta_1) + \\
+&&  \sum_{i=1}^n y_{1,i} \log \left(  \frac{1}{\sigma}\phi\left(\frac{y_{2,i} - \bv{x}_{2,i}'\boldsymbol\beta_2}{\sigma}\right)\right) + \\
+&&  \sum_{i=1}^n y_{1,i} \log \left(\Phi\left( \frac{\bv{x}_{1,i}'\boldsymbol\beta_1 + \dfrac{\rho}{\sigma_2}(y_{2,i}-\bv{x}_2'\boldsymbol\beta_2)}{\sqrt{1-\rho^2}}\right)\right).
+\end{eqnarray*}
+
+
+We can also compute conditional expectations:
+\begin{eqnarray}
+\mathbb{E}(y_2^*|y_1=1,\bv{x}) &=& \mathbb{E}(\mathbb{E}(y_2^*|y_1^*,\bv{x})|y_1=1,\bv{x})\nonumber\\
+&=& \mathbb{E}(\bv{x}_2'\boldsymbol\beta_2 + \rho\sigma_2(y_1^*-\bv{x}_1'\boldsymbol\beta_1)|y_1=1,\bv{x})\nonumber\\
+&=& \bv{x}_2'\boldsymbol\beta_2 + \rho\sigma_2\mathbb{E}( \underbrace{y_1^*-\bv{x}_1'\boldsymbol\beta_1}_{=\varepsilon_1 \sim\mathcal{N}(0,1)}|\varepsilon_1>-\bv{x}_1'\boldsymbol\beta_1,\bv{x})\nonumber\\
+&=& \bv{x}_2'\boldsymbol\beta_2 + \rho\sigma_2\frac{\phi(-\bv{x}_1'\boldsymbol\beta_1)}{1 - \Phi(-\bv{x}_1'\boldsymbol\beta_1)}\nonumber\\
+&=& \bv{x}_2'\boldsymbol\beta_2 + \rho\sigma_2\frac{\phi(\bv{x}_1'\boldsymbol\beta_1)}{\Phi(\bv{x}_1'\boldsymbol\beta_1)}=\bv{x}_2'\boldsymbol\beta_2 + \rho\sigma_2\lambda(\bv{x}_1'\boldsymbol\beta_1),(\#eq:y2y11)
+\end{eqnarray}
+and:
+\begin{eqnarray*}
+\mathbb{E}(y_2^*|y_1=0,\bv{x}) &=&  \bv{x}_2'\boldsymbol\beta_2 + \rho\sigma_2\mathbb{E}(y_1^*-\bv{x}_1'\boldsymbol\beta_1|\varepsilon_1\le-\bv{x}_1'\boldsymbol\beta_1,\bv{x})\\
+&=& \bv{x}_2'\boldsymbol\beta_2 + \rho\sigma_2\frac{\phi(-\bv{x}_1'\boldsymbol\beta_1)}{1 - \Phi(-\bv{x}_1'\boldsymbol\beta_1)}\\
+&=& \bv{x}_2'\boldsymbol\beta_2 - \rho\sigma_2\frac{\phi(-\bv{x}_1'\boldsymbol\beta_1)}{\Phi(-\bv{x}_1'\boldsymbol\beta_1)}=\bv{x}_2'\boldsymbol\beta_2 - \rho\sigma_2\lambda(-\bv{x}_1'\boldsymbol\beta_1).
+\end{eqnarray*}
+
+**Heckman procedure**
+
+As for tobit models (Section \@ref(tobit)), we can use the Heckman procedure to estimate this model. Eq. \@ref(eq:y2y11) shows that $\mathbb{E}(y_2^*|y_1=1,\bv{x}) \ne  \bv{x}_2'\boldsymbol\beta_2$ when $\rho \ne 0$. Therefore, the OLS approach yields biased estimates based when it is employed only on the sub-sample where $y_1=1$.
+
+The Heckman two-step procedure (or "Heckit") consists in replacing $\lambda(\bv{x}_1'\boldsymbol\beta_1)$ appearing in Eq. \@ref(eq:y2y11) with a consistent estimate of it. More precisely:
+
+1.  Get an estimate $\widehat{\boldsymbol\beta_1}$ of $\boldsymbol\beta_1$ (probit regression of $y_1$ on $\bv{x}_1$).
+2.  Run the OLS regression (using only data associated with $y_1=1$):
+\begin{equation}(\#eq:OLSregHeckit)
+y_2  = \bv{x}_2'\boldsymbol\beta_2 + \rho \sigma_2 \lambda(\bv{x}_1'\widehat{\boldsymbol\beta_1}) + \varepsilon_2,
+\end{equation}
+considering $\lambda(\bv{x}_1'\widehat{\boldsymbol\beta_1})$ as a regressor.
+
+How to estimate $\sigma_2^2$? By Eq. \@ref(eq:Vtrunc), we have:
+$$
+\mathbb{V}ar(y_2|y_1^*>0,\bv{x}) = \mathbb{V}ar(\varepsilon_2|\varepsilon_1>-\bv{x}_1'\boldsymbol\beta_1,\bv{x}).
+$$
+Using that $\varepsilon_2$ can be decomposed as $\rho\sigma_2\varepsilon_1 + \xi$, where $\xi \sim \mathcal{N}(0,\sigma_2^2(1-\rho^2))$ is independent from $\varepsilon_1$, we get:
+$$
+\mathbb{V}ar(y_2|y_1^*>0,\bv{x}) = \sigma_2^2(1-\rho^2) + \rho^2\sigma_2^2 \mathbb{V}ar(\varepsilon_1|\varepsilon_1>-\bv{x}_1'\boldsymbol\beta_1,\bv{x}).
+$$
+Using Eq. \@ref(eq:Vtrunc2), we get:
+$$
+\mathbb{V}ar(\varepsilon_1|\varepsilon_1>-\bv{x}_1'\boldsymbol\beta_1,\bv{x}) = 1 - \bv{x}_1'\boldsymbol\beta_1 \lambda(\bv{x}_1'\boldsymbol\beta_1) - \lambda(\bv{x}_1'\boldsymbol\beta_1)^2,
+$$
+which gives
+\begin{eqnarray*}
+\mathbb{V}ar(y_2|y_1^*>0,\bv{x}) &=& \sigma_2^2(1-\rho^2) + \rho^2\sigma_2^2 (1 - \bv{x}_1'\boldsymbol\beta_1 \lambda(\bv{x}_1'\boldsymbol\beta_1) - \lambda(\bv{x}_1'\boldsymbol\beta_1)^2)\\
+&=& \sigma_2^2 - \rho^2\sigma_2^2 \left(\bv{x}_1'\boldsymbol\beta_1 \lambda(\bv{x}_1'\boldsymbol\beta_1) + \lambda(\bv{x}_1'\boldsymbol\beta_1)^2\right),
+\end{eqnarray*}
+and, finally:
+$$
+\sigma_2^2 \approx \widehat{\mathbb{V}ar}(y_2|y_1^*>0,\bv{x}) + \widehat{\rho \sigma_2}^2 \left(\bv{x}_1'\widehat{\boldsymbol\beta_1} \lambda(\bv{x}_1'\widehat{\boldsymbol\beta_1}) + \lambda(\bv{x}_1'\widehat{\boldsymbol\beta_1})^2\right).
+$$
+
+The Heckman procedure is computationally simple. Although computational costs are no longer an issue, the two-step solution allows certain generalisations more easily than ML, and is more robust in certain circumstances. The computation of parameter standard errors is fairly complicated because of the two steps (see @Cameron_Trivedi_2005, Subsection 16.10.2). Bootstrap can be resorted to.
+
+:::{.example #WageSample name="Wage prediction"}
+
+As in Example \@ref(exm:WageMroz1), let us use the @Mroz_1987 dataset again, with the objective of explaining wage setting.
+
+```{r #SampleSelec, warning=FALSE, message=FALSE}
+library(sampleSelection)
+library(AER)
+data("Mroz87")
+Mroz87$lfp.yesno <- NaN
+Mroz87$lfp.yesno[Mroz87$lfp==1] <- "yes"
+Mroz87$lfp.yesno[Mroz87$lfp==0] <- "no"
+Mroz87$lfp.yesno <- as.factor(Mroz87$lfp.yesno)
+#Logit & Probit (selection equation)
+logitW <- glm(lfp ~ age + I( age^2 ) + kids5 + huswage + educ,
+              family = binomial(link = "logit"), data = Mroz87) 
+probitW <- glm(lfp ~ age + I( age^2 ) + kids5 + huswage + educ,
+               family = binomial(link = "probit"), data = Mroz87) 
+# OLS for outcome:
+ols1 <- lm(log(wage) ~ educ+exper+I( exper^2 )+city,data=subset(Mroz87,lfp==1))
+# Two-step Heckman estimation
+heckvan <- 
+  heckit( lfp ~ age + I( age^2 ) + kids5 + huswage + educ, # selection equation
+          log(wage) ~ educ + exper + I( exper^2 ) + city, # outcome equation
+          data=Mroz87 )
+# Maximun likelihood estimation of selection model:
+ml <- selection(lfp~age+I(age^2)+kids5+huswage+educ, 
+                log(wage)~educ+exper+I(exper^2)+city, data = Mroz87)
+# Print selection-equation estimates:
+stargazer(logitW,probitW,heckvan,ml,type = "text",no.space = TRUE,
+          selection.equation = TRUE)
+# Print outcome-equation estimates:
+stargazer(ols1,heckvan,ml,type = "text",no.space = TRUE,omit.stat = "f")
+```
+:::
+

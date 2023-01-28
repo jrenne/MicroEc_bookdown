@@ -1,0 +1,423 @@
+# Binary-choice models
+
+In microeconometric models, the variables of interest often feature restricted distributions ---for instance with discontinuous support---, which necessitates specific models. In many instances, the variables to be explained (the $y_i$'s) have only two possible values ($0$ and $1$, say). That is, they are binary variables. The probability for them to be equal to either 0 or 1 may depend on independent variables, gathered in vectors $\bv{x}_i$ ($K \times 1$).
+
+The spectrum of applications is wide:
+
+* Binary decisions (e.g. in referendums, being owner or renter, living in the city or in the countryside, in/out of the labour force,...),
+* Contamination (disease or default),
+* Success/failure (exams).
+
+Without loss of generality, the model reads:
+\begin{equation}\label{eq:binaryBenroulli}
+y_i | \bv{X} \sim \mathcal{B}(g(\bv{x}_i;\boldsymbol\theta)),
+\end{equation}
+where $g(\bv{x}_i;\boldsymbol\theta)$ is the parameter of the Bernoulli distribution. In other words, conditionally on $\bv{X}$:
+\begin{equation}
+y_i = \left\{
+\begin{array}{cl}
+1 & \mbox{ with probability } g(\bv{x}_i;\boldsymbol\theta)\\
+0 & \mbox{ with probability } 1-g(\bv{x}_i;\boldsymbol\theta),
+\end{array}
+\right.(\#eq:genericBinary)
+\end{equation}
+where $\boldsymbol\theta$ is a vector of parameters to be estimated.
+
+An estimation strategy is to assume that $g(\bv{x}_i;\boldsymbol\theta)$ can be proxied by $\tilde{\boldsymbol\theta}'\bv{x}_i$ and to run a linear regression to estimate $\tilde{\boldsymbol\theta}$ (a situation called **Linear Probability Model, LPM**):
+$$
+y_i = \tilde{\boldsymbol\theta}'\bv{x}_i + \varepsilon_i.
+$$
+Notwithstanding the fact that this specification does not exclude negative probabilities or probabilities greater than one, it could be compatible with the *assumption of zero conditional mean* (Hypothesis \@ref(hyp:exogeneity)) and with the *assumption of non-correlated residuals* (Hypothesis \@ref(hyp:noncorrelResid)), but more difficultly with the *homoskedasticity assumption* (Hypothesis \@ref(hyp:homoskedasticity)). Moreover, the $\varepsilon_i$'s cannot be Gaussian (because $y_i \in \{0,1\}$). Hence, using a linear regression to study the relationship between $\bv{x}_i$ and $y_i$ can be consistent but it is inefficient.
+
+
+
+Figure \@ref(fig:LPM) illustrates the fit resulting from an application of the LPM model to binary (dependent) variables.
+
+```{r LPM, echo=FALSE, fig.cap="Fitting a binary variable with a linear model (Linear Probability Model, LPM). The model is $\\mathbb{P}(y_i=1|x_i)=\\Phi(0.5+2x_i)$, where $\\Phi$ is the c.d.f. of the normal distribution and where $x_i \\sim \\,i.i.d.\\,\\mathcal{N}(0,1)$.", fig.asp = .6, out.width = "95%", fig.align = 'left-aligned'}
+beta0 <- 0.5;beta1 <- 2
+nb.sim <- 100
+xx <- rnorm(nb.sim)
+P.vec <- pnorm(beta0 + beta1*xx)
+U <- runif(nb.sim)
+yy <- (U<P.vec)
+eqY <- lm(yy~xx)
+par(mfrow=c(1,1));par(plt=c(.1,.95,.25,.95))
+plot(xx,yy,pch=19,xlab="x",ylab="y",xlim=c(-5,3))
+abline(eqY,col="blue",lwd=2)
+legend("topleft",
+       c("Observations","Linear regression line (LPM)"),
+       lty=c(NaN,1), # gives the legend appropriate symbols (lines)       
+       lwd=c(2,2), # line width
+       col=c("black","blue"),
+       pch=c(19,NaN),seg.len=2)
+```
+
+Except for its last row (LPM case), Table \@ref(tab:foo) provides examples of functions $g$ valued in $[0,1]$, and that can therefore used in models of the type: $\mathbb{P}(y_i=1|\bv{x}_i;\boldsymbol\theta) = g(\boldsymbol\theta'\bv{x}_i)$ (see Eq. \@ref(eq:genericBinary)). The "linear" case is given for comparison, but note that it does not satisfy $g(\boldsymbol\theta'\bv{x}_i) \in [0,1]$ for any value of $\boldsymbol\theta'\bv{x}_i$.
+
+
+Table: (\#tab:foo) This table provides examples of function $g$, s.t. $\mathbb{P}(y_i=1|\bv{x}_i;\boldsymbol	heta) = g(\boldsymbol\theta'\bv{x}_i)$. The LPM case (last row) is given for comparison but, again, it does not satisfy $g(\boldsymbol\theta'\bv{x}_i) \in [0,1]$ for any value of $\boldsymbol\theta'\bv{x}_i$.
+
+| Model   | Function $g$ | Derivative   |
+|---------|---------------|------------------|
+| Probit  | $\Phi$  | $\phi$      |
+| Logit   | $\dfrac{\exp(x)}{1+\exp(x)}$    | $\dfrac{\exp(x)}{(1+\exp(x))^2}$ |
+| log-log | $1 - \exp(-\exp(x))$ | $\exp(-\exp(x))\exp(x)$     |
+| linear (LPM)  | $x$  | 1  |
+
+
+Figure \@ref(fig:ProbLogit) displays the first three $g$ functions appearing in Table \@ref(tab:foo).
+
+```{r ProbLogit, echo=FALSE, fig.cap="Probit, Logit, and Log-log functions.", fig.asp = .6, out.width = "95%", fig.align = 'left-aligned'}
+x <- seq(-5,5,by=.01)
+par(plt=c(.1,.95,.25,.95))
+plot(x,pnorm(x),type="l",lwd=2,col="black",xlab="x",ylab="")
+lines(x,1/(1+exp(-x)),col="blue",lwd=2)
+lines(x,1- exp(-exp(x)),col="red",lwd=2)
+legend("topleft",
+       c("Probit","Logit","Log-log"),
+       lty=c(1,1,1), # gives the legend appropriate symbols (lines)       
+       lwd=c(2,2,2), # line width
+       col=c("black","blue","red"),
+       seg.len=2)
+```
+
+
+The **probit** and the **logit** models are popular binary-choice models. In the probit model, we have:
+\begin{equation}
+g(z) = \Phi(z),(\#eq:probit)
+\end{equation}
+where $\Phi$ is the c.d.f. of the normal distribution. And for the logit model:
+\begin{equation}
+g(z) = \frac{1}{1+\exp(-z)}.(\#eq:logit)
+\end{equation}
+
+Figure \@ref(fig:LPM2) shows the conditional probabilities associated with the (probit) model that had been used to generate the data of Figure \@ref(fig:LPM).
+
+```{r LPM2, echo=FALSE, fig.cap="The model is $\\mathbb{P}(y_i=1|x_i)=\\Phi(0.5+2x_i)$, where $\\Phi$ is the c.d.f. of the normal distribution and where $x_i \\sim \\,i.i.d.\\,\\mathcal{N}(0,1)$. Crosses give the model-implied probabilities of having $y_i=1$ (conditional on $x_i$).", fig.asp = .6, out.width = "95%", fig.align = 'left-aligned'}
+P.vec <- pnorm(beta0 + beta1*xx)
+par(plt=c(.1,.95,.25,.95))
+plot(xx,yy,pch=19,xlab="x",ylab="y",xlim=c(-5,3))
+abline(eqY,col="blue",lwd=2)
+points(xx,P.vec,pch=3,col="red",lwd=2)
+legend("topleft",
+       c("Observations","fitted linear regressions",expression(paste(P,"(",y[i],"=",1,"|",x[i],")",sep=""))),
+       lty=c(NaN,1,NaN), # gives the legend appropriate symbols (lines)       
+       lwd=c(2,2,2), # line width
+       col=c("black","blue","red"),
+       pch=c(19,NaN,3),
+       seg.len=2)
+```
+
+
+## Interpretation in terms of latent variable, and utility-based models {#latent}
+
+The probit model has an interpretation in terms of latent variables, which, in turn, is often exploited  in structural models, called **Random Utility Models (RUM)**. In such structural models, it is assumed that the agents that have to take the decision do so by selecting the outcome that provides them with the larger utility (for agent $i$, two possible outcomes: $y_i=0$ or $y_i=1$). Part of this utility is observed by the econometrician ---it depends on the covariates $\bv{x}_i$--- and part of it is latent.
+
+In the probit model, we have:
+$$
+\mathbb{P}(y_i=1|\bv{x}_i;\boldsymbol\theta) = \Phi(\boldsymbol\theta'\bv{x}_i) = \mathbb{P}(-\varepsilon_{i}<\boldsymbol\theta'\bv{x}_i),
+$$
+where $\varepsilon_{i} \sim \mathcal{N}(0,1)$. That is:
+$$
+\mathbb{P}(y_i=1|\bv{x}_i;\boldsymbol\theta) = \mathbb{P}(0< y_i^*),
+$$
+where $y_i^* = \boldsymbol\theta'\bv{x}_i + \varepsilon_i$, with $\varepsilon_{i} \sim \mathcal{N}(0,1)$. Variable $y_i^*$ can be interpreted as a (latent) variable that determines $y_i$ (since $y_i = \mathbb{I}_{\{y_i^*>0\}}$).
+
+Figure \@ref(fig:Latent) illustrates this situation.
+
+```{r Latent, echo=FALSE, fig.cap="Distribution of $y_i^*$ conditional on $\\bv{x}_i$.", fig.asp = .6, out.width = "95%", fig.align = 'left-aligned'}
+par(plt=c(.12,.95,.25,.95))
+mu <- 1
+x <- seq(-4,4,by=.01)
+plot(x,dnorm(x-mu),type="l",lwd=2,
+     xlab=expression(paste("Possible values of ",y[i],"*",sep="")),
+     ylab="")
+abline(v=mu,lty=2,col="grey")
+abline(v=0)
+abline(h=0)
+text(mu,.02,expression(paste(theta,"'",x_i,sep="")),pos=4)
+x.0 <- seq(-4,0,by=.01)
+polygon(c(x.0,x.0[length(x.0):1]),c(dnorm(x.0-mu),0*x.0),col="grey")
+abline(v=0)
+arrows(x0=-2, y0=.3, x1 = -1, y1 = .01, length = 0.05, angle = 20,
+       code = 2)
+text(-2,.3,expression(paste(P,"(",y[i],"=0|",x[i],";",theta,")",sep="")),pos=2)
+arrows(x0=2.5, y0=.3, x1 = 1.5, y1 = .2, length = 0.05, angle = 20,
+       code = 2)
+text(2.5,.3,expression(paste(P,"(",y[i],"=1|",x[i],";",theta,")",sep="")),pos=4)
+```
+
+
+Assume that agent ($i$) chooses $y_i=1$ if the utility associated with this choice ($U_{i,1}$) is higher than the one associated with $y_i=0$ (that is $U_{i,0}$). Assume further that the utility of agent $i$, if she chooses outcome $j$ ($\in \{0,1\}$), is given by
+$$
+U_{i,j} = V_{i,j} + \varepsilon_{i,j},
+$$
+where $V_{i,j}$ is the deterministic component of the utility associated with choice and where $\varepsilon_{i,j}$ is a random (agent-specific) component. Moreover, posit $V_{i,j} = \boldsymbol\theta_j'\bv{x}_i$. We then have:
+\begin{eqnarray}
+\mathbb{P}(y_i = 1|\bv{x}_i;\boldsymbol\theta) &=& \mathbb{P}(\boldsymbol\theta_1'\bv{x}_i+\varepsilon_{i,1}>\boldsymbol\theta_0'\bv{x}_i+\varepsilon_{i,0}) \nonumber\\
+&=& F(\boldsymbol\theta_1'\bv{x}_i-\boldsymbol\theta_0'\bv{x}_i) = F([\boldsymbol\theta_1-\boldsymbol\theta_0]'\bv{x}_i),(\#eq:utility)
+\end{eqnarray}
+where $F$ is the c.d.f. of $\varepsilon_{i,0}-\varepsilon_{i,1}$.
+
+Note that only the difference $\boldsymbol\theta_1-\boldsymbol\theta_0$ is identifiable (as opposed to $\boldsymbol\theta_1$ *and* $\boldsymbol\theta_0$). Indeed, replacing $U$ with $aU$ ($a>0$) gives the same model. This *scaling* issue can be solved by fixing the variance of $\varepsilon_{i,0}-\varepsilon_{i,1}$.
+
+:::{.example #migration name="Migration and income"}
+
+The RUM approach has been used by @Nakosteen_Zimmer_1980 to study migration choices. Their model is based on the comparison of marginal costs and benefits associated with migration. The main ingredients of their approach are as follows:
+
+* Wage that can be earned at the present location: $y_p^* = \boldsymbol\theta_p'\bv{x}_p + \varepsilon_p$.
+* Migration cost: $C^*= \boldsymbol\theta_c'\bv{x}_c + \varepsilon_c$.
+* Wage earned elsewhere: $y_m^* = \boldsymbol\theta_m'\bv{x}_m + \varepsilon_m$.
+
+In this context, agents decision to migrate if $y_m^* >  y_p^* + C^*$, i.e. if
+$$
+y^* = y_m^* -  y_p^* - C^* =  \boldsymbol\theta'\bv{x} + \underbrace{\varepsilon}_{=\varepsilon_m - \varepsilon_c - \varepsilon_p}>0,
+$$
+where $\bv{x}$ is the union of the $\bv{x}_i$s, for $i \in \{p,m,c\}$.
+:::
+
+## Alternative-Varying Regressors {#Avregressors}
+
+In some cases, regressors may depend on the considered alternative ($0$ or $1$). For instance:
+
+* When modeling the decision to participate in the labour force (or not), the wage depends on the alternative. Typically, it is zero if the considered agent has decided not to work (and strictly positive otherwise).
+* In the context of the choice of transportation mode, "time cost" depends on the considered transportation mode.
+
+In terms of utility, we then have:
+$$
+V_{i,j} = {\theta^{(u)}_{j}}'\bv{u}_{i,j} + {\theta^{(v)}_{j}}'\bv{v}_{i},
+$$
+where the $\bv{u}_{i,j}$'s are regressors associated with agent $i$, but taking different values for the different choices ($j=0$ or $j=1$). In that case, Eq. \@ref(eq:utility) becomes:
+\begin{equation}
+\mathbb{P}(y_i = 1|\bv{x}_i;\boldsymbol\theta)  = F\left({\theta^{(u)}_{1}}'\bv{u}_{i,1}-{\theta^{(u)}_{0}}'\bv{u}_{i,0}+[\boldsymbol\theta_1^{(v)}-\boldsymbol\theta_0^{(v)}]'\bv{v}_i\right),(\#eq:utility2)
+\end{equation}
+and, if $\theta^{(u)}_{1}=\theta^{(u)}_{0}=\theta^{(u)}$ ---as is customary--- we get:
+\begin{equation}
+\mathbb{P}(y_i = 1|\bv{x}_i;\boldsymbol\theta)  = F\left({\theta^{(u)}_{1}}'(\bv{u}_{i,1}-\bv{u}_{i,0})+[\boldsymbol\theta_1^{(v)}-\boldsymbol\theta_0^{(v)}]'\bv{v}_i\right).(\#eq:utility3)
+\end{equation}
+
+:::{.example #FishingTable name="Fishing-mode dataset"}
+
+The fishing-mode dataset used in @Cameron_Trivedi_2005 (Chapters 14 and 15) contains alternative-specific variables. Specifically, for each individual, the price and catch rate depend on the fishing model. In the table reported below, lines `price` and `catch` correspond to the prices and catch rates associated with the chosen alternative.
+
+```{r fishing1, warning=FALSE, message=FALSE}
+library(mlogit)
+data("Fishing",package="mlogit")
+stargazer::stargazer(Fishing,type="text")
+```
+:::
+
+## Estimation
+
+These models can be estimated by Maximum Likelihood approaches (see Section \@ref(secMLE)).
+
+To simplify the exposition, we consider the $\bv{x}_i$ vectors of covariates to be deterministic. Moreover, we assume that the r.v. are independent across entities $i$. How to write the likelihood in that case? It is easily checked that:
+$$
+f(y_i|\bv{x}_i;\boldsymbol\theta) =   g(\boldsymbol\theta'\bv{x}_i)^{y_i}(1-g(\boldsymbol\theta'\bv{x}_i))^{1-y_i}.
+$$
+
+Therefore, if the observations $(\bv{x}_i,y_i)$ are independent across entities $i$, we obtain:
+$$
+\log \mathcal{L}(\boldsymbol\theta;\bv{y},\bv{X}) = \sum_{i=1}^{n}y_i \log[g(\boldsymbol\theta'\bv{x}_i)] + (1-y_i)\log[1-g(\boldsymbol\theta'\bv{x}_i)].
+$$
+
+The likelihood equation reads (FOC of the optimization program, see Def. \@ref(def:likFunction)):
+$$
+\dfrac{\partial \log \mathcal{L}(\boldsymbol\theta;\bv{y},\bv{X})}{\partial \boldsymbol\theta} = \bv{0},
+$$
+that is:
+$$
+\sum_{i=1}^{n} y_i \bv{x}_i\frac{g'(\boldsymbol\theta'\bv{x}_i)}{g(\boldsymbol\theta'\bv{x}_i)} - (1-y_i) \bv{x}_i \frac{g'(\boldsymbol\theta'\bv{x}_i)}{1-g(\boldsymbol\theta'\bv{x}_i)} = \bv{0}.
+$$
+
+This is a nonlinear (multivariate) equation that can be solved numerically. Under regularity conditions (Hypotheses \@ref(hyp:MLEregularity)), we approximately have (Prop. \@ref(prp:MLEproperties)):
+$$
+\boldsymbol\theta_{MLE} \sim \mathcal{N}(\boldsymbol\theta_0,\bv{I}(\boldsymbol\theta_0)^{-1}),
+$$
+where
+$$
+\bv{I}(\boldsymbol\theta_0) = - \mathbb{E}_0 \left( \frac{\partial^2 \log \mathcal{L}(\theta;\bv{y},\bv{X})}{\partial \boldsymbol\theta \partial \boldsymbol\theta'}\right) = n \mathcal{I}_Y(\boldsymbol\theta_0).
+$$
+
+For finite samples, we can e.g. approximate $\bv{I}(\boldsymbol\theta_0)^{-1}$ by Eq. \@ref(eq:III1):
+$$
+\bv{I}(\boldsymbol\theta_0)^{-1} \approx -\left(\frac{\partial^2 \log \mathcal{L}(\boldsymbol\theta_{MLE};\bv{y},\bv{X})}{\partial \boldsymbol\theta \partial \boldsymbol\theta'}\right)^{-1}.
+$$
+
+
+In the Probit case (see Table \@ref(tab:foo)), it can be shown that we have:
+\begin{eqnarray*}
+&&\frac{\partial^2 \log \mathcal{L}(\boldsymbol\theta;\bv{y},\bv{X})}{\partial \boldsymbol\theta \partial \boldsymbol\theta'} = - \sum_{i=1}^{n} g'(\boldsymbol\theta'\bv{x}_i) [\bv{x}_i \bv{x}_i'] \times \\
+&&\left[y_i \frac{g'(\boldsymbol\theta'\bv{x}_i) + \boldsymbol\theta'\bv{x}_ig(\boldsymbol\theta'\bv{x}_i)}{g(\boldsymbol\theta'\bv{x}_i)^2} + (1-y_i) \frac{g'(\boldsymbol\theta'\bv{x}_i) - \boldsymbol\theta'\bv{x}_i (1 - g(\boldsymbol\theta'\bv{x}_i))}{(1-g(\boldsymbol\theta'\bv{x}_i))^2}\right].
+\end{eqnarray*}
+
+In the Logit case (see Table \@ref(tab:foo)), it can be shown that we have:
+$$
+\frac{\partial^2 \log \mathcal{L}(\boldsymbol\theta;\bv{y},\bv{X})}{\partial \boldsymbol\theta \partial \boldsymbol\theta'} = - \sum_{i=1}^{n} g'(\boldsymbol\theta'\bv{x}_i) \bv{x}_i\bv{x}_i',
+$$
+where $g'(x)=\dfrac{\exp(-x)}{(1 + \exp(-x))^2}$.
+
+Remark that, since $g'(x)>0$, $-\partial^2 \log \mathcal{L}(\boldsymbol\theta;\bv{y},\bv{X})/\partial \boldsymbol\theta \partial \boldsymbol\theta'$ is positive definite.
+
+## Marginal effects {#marginalFX}
+
+How to measure marginal effects, i.e. the effect on the probability that $y_i=1$ of a marginal increase of $x_{i,k}$? This  object is given by:
+$$
+\frac{\partial \mathbb{P}(y_i=1|\bv{x}_i;\boldsymbol\theta)}{\partial x_{i,k}} = \underbrace{g'(\boldsymbol\theta'\bv{x}_i)}_{>0}\theta_k,
+$$
+which is of the same sign as $\theta_k$ if function $g$ is monotonously increasing.
+
+For agent $i$, this marginal effect is consistently estimated by $g'(\boldsymbol\theta_{MLE}'\bv{x}_i)\theta_{MLE,k}$. It is important to see that the marginal effect depends on $\bv{x}_i$: respective increases by 1 unit of $x_{i,k}$ (entity $i$) and of $x_{j,k}$ (entity $j$) do not necessarily have the same effect on $\mathbb{P}(y_i=1|\bv{x}_i;\boldsymbol\theta)$ as on $\mathbb{P}(y_j=1|\bv{x}_j;\boldsymbol\theta)$. To address this issue, one can compute some measures of "average" marginal effect. There are two main solutions. For each explanatory variable $k$:
+
+i. Denoting by $\hat{\bv{x}}$ the sample average of the $\bv{x}_i$s, compute $g'(\boldsymbol\theta_{MLE}'\hat{\bv{x}})\theta_{MLE,k}$.
+ii. Compute the average (across $i$) of $g'(\boldsymbol\theta_{MLE}'\bv{x}_i)\theta_{MLE,k}$.
+
+
+## Goodness of fit
+
+There is no obvious version of "$R^2$" for binary-choice models. Existing measures are called **pseudo-$R^2$ measures**.
+
+Denoting by $\log \mathcal{L}_0(\bv{y})$ the (maximum) log-likelihood that would be obtained for a model containing only a constant term (i.e. with $\bv{x}_i = 1$ for all $i$), the McFadden's pseudo-$R^2$ is given by:
+$$
+R^2_{MF} = 1 - \frac{\log \mathcal{L}(\boldsymbol\theta;\bv{y})}{\log \mathcal{L}_0(\bv{y})}.
+$$
+Intuitively, $R^2_{MF}=0$ if the explanatory variables do not convey any information on the outcome $y$. Indeed, in this case, the model is not better than the reference model, that simply captures the fraction of $y_i$'s that are equal to 1.
+
+:::{.example #creditProbit name="Credit and defaults (Lending-club dataset)"}
+
+This example makes use of the `credit` data of package `AEC`. The objective is to model the default probabilities of borrowers.
+
+Let us first represent the relationship between the fraction of households that have defaulted on their loan and their annual income:
+
+```{r Probitlending}
+library(AEC)
+credit$Default <- 0
+credit$Default[credit$loan_status == "Charged Off"] <- 1
+credit$Default[credit$loan_status ==
+                 "Does not meet the credit policy. Status:Charged Off"] <- 1
+credit$amt2income <- credit$loan_amnt/credit$annual_inc
+plot(as.factor(credit$Default)~log(credit$annual_inc),
+     ylevels=2:1,ylab="Default status",xlab="log(annual income)")
+```
+
+The previous figure suggests that the effect of annual income on the probability of default is non-monotonous. We will therefore include a quadratic term in one of our specification (namely `eq1` below).
+
+We consider three specifications. The first one (`eq0`), with no explanatory variables, is trivial. It will just be used to compute the pseudo-$R^2$. In the second (`eq1`), we consider a few covariates (loan amount, the ratio between the amount and annual income, The number of more-than-30 days past-due incidences of delinquency in the borrower's credit file for the past 2 years, and a quadratic function of annual income). In the third model (`eq2`), we add a credit rating.
+
+```{r Probitlending2,warning=FALSE}
+eq0 <- glm(Default ~ 1,data=credit,family=binomial(link="probit"))
+eq1 <- glm(Default ~ log(loan_amnt) + amt2income + delinq_2yrs + 
+             log(annual_inc)+ I(log(annual_inc)^2),
+           data=credit,family=binomial(link="probit"))
+eq2 <- glm(Default ~ grade + log(loan_amnt) + amt2income + delinq_2yrs + 
+             log(annual_inc)+ I(log(annual_inc)^2),
+           data=credit,family=binomial(link="probit"))
+stargazer::stargazer(eq0,eq1,eq2,type="text",no.space = TRUE)
+```
+
+Let us compute the pseudo R2 for the last two models:
+
+```{r Probitlending2bis}
+logL0 <- logLik(eq0);logL1 <- logLik(eq1);logL2 <- logLik(eq2)
+pseudoR2_eq1 <- 1 - logL1/logL0 # pseudo R2
+pseudoR2_eq2 <- 1 - logL2/logL0 # pseudo R2
+c(pseudoR2_eq1,pseudoR2_eq2)
+```
+
+Let us now compute the (average) marginal effects, using method ii of Section \@ref(marginalFX):
+
+```{r Probitlending3}
+mean(dnorm(predict(eq2)),na.rm=TRUE)*eq2$coefficients
+```
+
+There is an issue for the `annual_inc` variable. Indeed, the previous computation does not realize that this variable appears twice among the explanatory variables (through `log(annual_inc)` and `I(log(annual_inc)^2)`). To address this, one can proceed as follows: (1) we construct a new counterfactual dataset where annual incomes are increased by 1\%, (2) we use the model to compute model-implied probabilities of default on this new dataset and (3), we subtract the probabilities resulting from the original dataset from these counterfactual probabilities:
+
+```{r Probitlending4}
+new_credit <- credit
+new_credit$annual_inc <- 1.01 * new_credit$annual_inc
+bas_predict_eq2  <- predict(eq2, newdata = credit, type = "response")
+# This is equivalent to pnorm(predict(eq2, newdata = credit))
+new_predict_eq2  <- predict(eq2, newdata = new_credit, type = "response")
+mean(new_predict_eq2 - bas_predict_eq2)
+```
+The negative sign means that, on average across the entities considered in the analysis, a 1\% increase in annual income results in a decrease in the default probability. This average effect is however pretty low. To get an economic sense of the size of this effect, let us compute the average effect associated with a unit increase in the number of delinquencies:
+
+```{r Probitlending5}
+new_credit <- credit
+new_credit$delinq_2yrs <- credit$delinq_2yrs + 1
+new_predict_eq2  <- predict(eq2, newdata = new_credit, type = "response")
+mean(new_predict_eq2 - bas_predict_eq2)
+```
+
+We can employ a likelihood ratio test (see Def. \@ref(def:LR)) to see if the two variables associated with annual income are jointly statistically significant (in the context of `eq1`):
+```{r Probitlending6}
+eq1restr <- glm(Default ~ log(loan_amnt) + amt2income + delinq_2yrs,
+                data=credit,family=binomial(link="probit"))
+LRstat <- 2*(logL1 - logLik(eq1restr))
+pvalue <- 1 - c(pchisq(LRstat,df=2))
+```
+
+The computation gives a p-value of `r round(pvalue,4)`.
+
+:::
+
+
+
+:::{.example #Fisch142 name="Replicating Table 14.2 of Cameron and Trivedi (2005)"}
+
+The following lines of codes replicate Table 14.2 of @Cameron_Trivedi_2005 (see Example \@ref(exm:FishingTable)).
+
+```{r fishing2, warning=FALSE}
+data.reduced <- subset(Fishing,mode %in% c("charter","pier"))
+data.reduced$lnrelp <- log(data.reduced$price.charter/data.reduced$price.pier)
+data.reduced$y <- 1*(data.reduced$mode=="charter")
+# check first line of Table 14.1:
+price.charter.y0 <- mean(data.reduced$pcharter[data.reduced$y==0])
+price.charter.y1 <- mean(data.reduced$pcharter[data.reduced$y==1])
+price.charter    <- mean(data.reduced$pcharter)
+# Run probit regression:
+reg.probit <- glm(y ~ lnrelp,
+                  data=data.reduced,
+                  family=binomial(link="probit"))
+# Run Logit regression:
+reg.logit <- glm(y ~ lnrelp,
+                 data=data.reduced,
+                 family=binomial(link="logit"))
+# Run OLS regression:
+reg.OLS <- lm(y ~ lnrelp,
+              data=data.reduced)
+# Replicates Table 14.2 of Cameron and Trivedi:
+stargazer::stargazer(reg.logit, reg.probit, reg.OLS,no.space = TRUE,
+                     type="text")
+```
+:::
+
+
+## Predictions and ROC curves
+
+How to compute model-implied predicted outcomes? As is the case for $y_i$, predicted outcomes $\hat{y}_i$ need to be valued in $\{0,1\}$. A natural choice consists in considering that $\hat{y}_i=1$ if $\mathbb{P}(y_i=1|\bv{x}_i;\boldsymbol\theta) > 0.5$, i.e., in taking a cutoff of $c=0.5$. There exist, though, situations where doing so is not relevant. For instance, we may have some models where all predicted probabilities are small, but some less than others. In this context, a model-implied probability of 10\% (say) could characterize a "high-risk" entity. However, using a cutoff of 50\% would not identify this level of riskiness.
+
+The **receiver operating characteristics (ROC)** curve consitutes a more general approach. The idea is to remain agnostic and to consider all possible values of the cutoff $c$. It works as follows. For each potential cutoff $c \in [0,1]$, compute (and plot):
+
+*	The fraction of $y = 1$ values correctly classified (*True Positive Rate*) against
+* The fraction of $y = 0$ values incorrectly specified (*False Positive Rate*).
+
+Such a curve mechanically starts at (0,0) ---which corresponds to $c=1$--- and terminates at (1,1) --situation when $c=0$.
+
+In the case of no predictive ability (worst situation), the ROC curve is a straight line between (0,0) and (1,1).
+
+:::{.example #FishingROC name="ROC with the fishing-mode dataset"}
+Figure \@ref(fig:fishing3) shows the ROC curve associated with the probit model estimated in Example \@ref(exm:Fisch142).
+
+```{r fishing3, message=FALSE, warning=FALSE,results='hide',fig.keep='all', fig.cap="Application of the ROC methodology on the fishing-mode dataset.", fig.asp = .6, out.width = "95%", fig.align = 'left-aligned'}
+library(pROC)
+predict_model <- predict.glm(reg.probit,type = "response")
+roc(data.reduced$y, predict_model, percent=T,
+    boot.n=1000, ci.alpha=0.9, stratified=T, plot=TRUE, grid=TRUE,
+    show.thres=TRUE, legacy.axes = TRUE, reuse.auc = TRUE,
+    print.auc = TRUE, print.thres.col = "blue", ci=TRUE,
+    ci.type="bars", print.thres.cex = 0.7, col = 'red',
+    main = paste("ROC curve using","(N = ",nrow(data.reduced),")") )
+```
+:::
+

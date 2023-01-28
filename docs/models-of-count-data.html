@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 7 Models of Count Data | Micro-Econometrics</title>
+<meta name="author" content="Jean-Paul Renne">
+<meta name="description" content="Count-data models aim at explaining dependent variables \(y_i\) that take integer values. Typically, one may want to account for the number of doctor visits, of customers, of hospital stays, of...">
+<meta name="generator" content="bookdown 0.27 with bs4_book()">
+<meta property="og:title" content="Chapter 7 Models of Count Data | Micro-Econometrics">
+<meta property="og:type" content="book">
+<meta property="og:description" content="Count-data models aim at explaining dependent variables \(y_i\) that take integer values. Typically, one may want to account for the number of doctor visits, of customers, of hospital stays, of...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 7 Models of Count Data | Micro-Econometrics">
+<meta name="twitter:description" content="Count-data models aim at explaining dependent variables \(y_i\) that take integer values. Typically, one may want to account for the number of doctor visits, of customers, of hospital stays, of...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.0/transition.js"></script><script src="libs/bs3compat-0.4.0/tabs.js"></script><script src="libs/bs3compat-0.4.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="my-style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Micro-Econometrics</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Micro-Econometrics</a></li>
+<li><a class="" href="ChapterLS.html"><span class="header-section-number">1</span> Linear Regressions</a></li>
+<li><a class="" href="Panel.html"><span class="header-section-number">2</span> Panel regressions</a></li>
+<li><a class="" href="estimation-methods.html"><span class="header-section-number">3</span> Estimation Methods</a></li>
+<li><a class="" href="binary-choice-models.html"><span class="header-section-number">4</span> Binary-choice models</a></li>
+<li><a class="" href="multiple-choice-models.html"><span class="header-section-number">5</span> Multiple Choice Models</a></li>
+<li><a class="" href="tobit-and-sample-selection-models.html"><span class="header-section-number">6</span> Tobit and sample-selection models</a></li>
+<li><a class="active" href="models-of-count-data.html"><span class="header-section-number">7</span> Models of Count Data</a></li>
+<li><a class="" href="append.html"><span class="header-section-number">8</span> Appendix</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="models-of-count-data" class="section level1" number="7">
+<h1>
+<span class="header-section-number">7</span> Models of Count Data<a class="anchor" aria-label="anchor" href="#models-of-count-data"><i class="fas fa-link"></i></a>
+</h1>
+<p>Count-data models aim at explaining dependent variables <span class="math inline">\(y_i\)</span> that take integer values. Typically, one may want to account for the number of doctor visits, of customers, of hospital stays, of borrowers’ defaults, of recreational trips, of accidents. Quite often, these data feature large proportion of zeros (see, e.g., Table 20.1 in <span class="citation">Cameron and Trivedi (<a href="references.html#ref-Cameron_Trivedi_2005" role="doc-biblioref">2005</a>)</span>), and/or are skewed to the right.</p>
+<div id="poisson-model" class="section level2" number="7.1">
+<h2>
+<span class="header-section-number">7.1</span> Poisson model<a class="anchor" aria-label="anchor" href="#poisson-model"><i class="fas fa-link"></i></a>
+</h2>
+<p>The most basic count-data model is the Poisson model. In this model, we have <span class="math inline">\(y \sim \mathcal{P}(\mu)\)</span>, i.e.
+<span class="math display">\[
+\mathbb{P}(y=k) = \frac{\mu^k e^{-\mu}}{k!},
+\]</span>
+implying <span class="math inline">\(\mathbb{E}(y) = \mathbb{V}ar(y) = \mu\)</span>.</p>
+<p>the Poisson parameter, <span class="math inline">\(\mu\)</span>, is then assumed to depend on some observed variables, gathered in vector <span class="math inline">\(\mathbf{x}_i\)</span> for entity <span class="math inline">\(i\)</span>. To ensure that <span class="math inline">\(\mu_i \ge 0\)</span>, it is common to take <span class="math inline">\(\mu_i = \exp(\boldsymbol\beta'\mathbf{x}_i)\)</span>, which gives:
+<span class="math display">\[
+y_i \sim \mathcal{P}(\exp[\boldsymbol\beta'\mathbf{x}_i]).
+\]</span></p>
+<p>The Poisson regression is intrinsically heteroskedastic (since <span class="math inline">\(\mathbb{V}ar(y_i) = \mu_i = \exp(\boldsymbol\beta'\mathbf{x}_i)\)</span>).</p>
+<p>Under the assumption of independence across entities, the log-likelihood is given by:
+<span class="math display">\[
+\log \mathcal{L}(\boldsymbol\beta;\mathbf{y},\mathbf{X}) = \sum_{i=1}^n (y_i \boldsymbol\beta'\mathbf{x}_i - \exp[\boldsymbol\beta'\mathbf{x}_i] - \ln[y_i!]).
+\]</span>
+The first-order condition to get the MLE is:
+<span class="math display" id="eq:FOCPoisson">\[\begin{equation}
+\sum_{i=1}^n (y_i - \exp[\boldsymbol\beta'\mathbf{x}_i])\mathbf{x}_i = \underbrace{\mathbf{0}}_{K \times 1}. \tag{7.1}
+\end{equation}\]</span></p>
+<p>Eq. <a href="models-of-count-data.html#eq:FOCPoisson">(7.1)</a> is equivalent to what would define the <strong>Pseudo Maximum-Likelihood</strong> estimator of <span class="math inline">\(\boldsymbol\beta\)</span> in the (misspecified) model
+<span class="math display">\[
+y_i \sim i.i.d.\,\mathcal{N}(\exp[\boldsymbol\beta'\mathbf{x}_i],\sigma^2).
+\]</span>
+That is, Eq. <a href="models-of-count-data.html#eq:FOCPoisson">(7.1)</a> also characterizes the (true) ML estimator of <span class="math inline">\(\boldsymbol\beta\)</span> in the previous model.</p>
+<p>Since <span class="math inline">\(\mathbb{E}(y_i|\mathbf{x}_i) = \exp(\boldsymbol\beta'\mathbf{x}_i)\)</span>, we have:
+<span class="math display">\[
+y_i = \exp(\boldsymbol\beta'\mathbf{x}_i) + \varepsilon_i,
+\]</span>
+with <span class="math inline">\(\mathbb{E}(\varepsilon_i|\mathbf{x}_i) = 0\)</span>. This notably implies that the (N)LS estimator of <span class="math inline">\(\boldsymbol\beta\)</span> is consistent.</p>
+<p>How to interpret regression coefficients (the components of <span class="math inline">\(\boldsymbol\beta\)</span>)? We have:
+<span class="math display">\[
+\frac{\partial \mathbb{E}(y_i|\mathbf{x}_i)}{\partial x_{i,j}} = \beta_j \exp(\boldsymbol\beta'\mathbf{x}_i),
+\]</span>
+which depends on the considered individual.</p>
+<p>The average estimated response is:
+<span class="math display">\[
+\widehat{\beta}_j \frac{1}{n}\sum_{i=1}^n  \exp(\widehat{\boldsymbol\beta}'\mathbf{x}_i),
+\]</span>
+which is equal to <span class="math inline">\(\widehat{\beta}_j \overline{y}\)</span> if the model includes a constant (e.g., if <span class="math inline">\(x_{1,i}=1\)</span> for all entities <span class="math inline">\(i\)</span>).</p>
+<p>The limitation of the standard Poisson model is that the distribution of <span class="math inline">\(y_i\)</span> conditional on <span class="math inline">\(\mathbf{x}_i\)</span> depends on a single parameter (<span class="math inline">\(\mu_i\)</span>). Besides, there is often a tension between fitting the fraction of zeros, i.e. <span class="math inline">\(\mathbb{P}(y_i=0|\mathbf{x}_i)=\exp[-\exp(\boldsymbol\beta'\mathbf{x}_i)]\)</span>, and the distribution of <span class="math inline">\(y_i|\mathbf{x}_i,y_i&gt;0\)</span>. The following models (negative binomial, or NB model, the Hurdle model, and the Zero-Inflated model) have been designed to address these points.</p>
+</div>
+<div id="negative-binomial-model" class="section level2" number="7.2">
+<h2>
+<span class="header-section-number">7.2</span> Negative binomial model<a class="anchor" aria-label="anchor" href="#negative-binomial-model"><i class="fas fa-link"></i></a>
+</h2>
+<p>In the negative binomial model, we have:
+<span class="math display">\[
+y_i|\lambda_i \sim \mathcal{P}(\lambda_i),
+\]</span>
+but <span class="math inline">\(\lambda_i\)</span> is now random. Specifically, it takes the form:
+<span class="math display">\[
+\lambda_i = \nu_i \times \exp(\boldsymbol\beta'\mathbf{x}_i),
+\]</span>
+where <span class="math inline">\(\nu_i \sim \,i.i.d.\,\Gamma(\underbrace{\delta}_{\mbox{shape}},\underbrace{1/\delta}_{\mbox{scale}})\)</span>. That is, the p.d.f. of <span class="math inline">\(\nu_i\)</span> is:
+<span class="math display">\[
+g(\nu) = \frac{\nu^{\delta - 1}e^{-\nu\delta}\delta^\delta}{\Gamma(\delta)},
+\]</span>
+where <span class="math inline">\(\Gamma:\,z \mapsto \int_0^{+\infty}t^{z-1}e^{-t}dt\)</span> (and <span class="math inline">\(\Gamma(k+1)=k!\)</span>).</p>
+<p>This notably implies that:
+<span class="math display">\[
+\mathbb{E}(\nu_i) = 1 \quad \mbox{and} \quad \mathbb{V}ar(\nu) = \frac{1}{\delta}.
+\]</span></p>
+<p>Hence, the p.d.f. of <span class="math inline">\(y_i\)</span> conditional on <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\delta\)</span> (with <span class="math inline">\(\mu=\exp(\boldsymbol\beta'\mathbf{x}_i)\)</span>) is obtained as a mixture of densities:
+<span class="math display">\[
+\mathbb{P}(y_i=k|\exp(\boldsymbol\beta'\mathbf{x}_i)=\mu;\delta)=\int_0^\infty \frac{e^{-\mu \nu}(\mu \nu)^k}{k!} \frac{\nu^{\delta - 1}e^{-\nu\delta}\delta^\delta}{\Gamma(\delta)} d \nu.
+\]</span></p>
+<p>It can be shown that:
+<span class="math display">\[
+\mathbb{E}(y|\mathbf{x}) = \mu \quad \mbox{and}\quad \mathbb{V}ar(y|\mathbf{x}) = \mu\left(1+\alpha \mu\right),
+\]</span>
+where <span class="math inline">\(\exp(\boldsymbol\beta'\mathbf{x}_i)=\mu\)</span> and <span class="math inline">\(\alpha = 1/\delta\)</span>.</p>
+<p>We have one additional degree of freedom w.r.t. the Poisson model (<span class="math inline">\(\alpha\)</span>).</p>
+<p>Note that <span class="math inline">\(\mathbb{V}ar(y|\mathbf{x}) &gt; \mathbb{E}(y|\mathbf{x})\)</span> (which is often called for by the data). Moreover, the conditional variance is quadratic in the mean:
+<span class="math display">\[
+\mathbb{V}ar(y|\mathbf{x}) = \mu+\alpha \mu^2.
+\]</span>
+The previous expression is the basis of the so-called <strong>NB2</strong> specification. If <span class="math inline">\(\delta\)</span> is replaced with <span class="math inline">\(\mu/\gamma\)</span>, then we get the <strong>NB1</strong> model:
+<span class="math display">\[
+\mathbb{V}ar(y|\mathbf{x}) = \mu(1+\gamma).
+\]</span></p>
+<div class="example">
+<p><span id="exm:Doctorvisits" class="example"><strong>Example 7.1  (Number of doctor visits) </strong></span>The following example compares different specifications, namely a linear regression model, a Poisson model, and a NB model, to account for the number of doctor visits. The dataset (`<code>randdata</code>) is the one used in Chapter 20 of <span class="citation">Cameron and Trivedi (<a href="references.html#ref-Cameron_Trivedi_2005" role="doc-biblioref">2005</a>)</span> (available on <a href="http://cameron.econ.ucdavis.edu/mmabook/mmadata.html">that page</a>).</p>
+<div class="sourceCode" id="cb131"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">AEC</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">COUNT</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/atahk/pscl">pscl</a></span><span class="op">)</span> <span class="co"># for predprob function and hurdle model</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>plt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.15</span>,<span class="fl">.95</span>,<span class="fl">.1</span>,<span class="fl">.95</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">randdata</span><span class="op">$</span><span class="va">mdvis</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: left-aligned">
+<span style="display:block;" id="fig:countdata1"></span>
+<img src="MicroEc_files/figure-html/countdata1-1.png" alt="Distribution of the number of doctor visits." width="95%"><p class="caption">
+Figure 7.1: Distribution of the number of doctor visits.
+</p>
+</div>
+<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">randdata</span><span class="op">$</span><span class="va">LC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">randdata</span><span class="op">$</span><span class="va">coins</span><span class="op">)</span></span>
+<span><span class="va">model.OLS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mdvis</span> <span class="op">~</span> <span class="va">LC</span> <span class="op">+</span> <span class="va">idp</span> <span class="op">+</span> <span class="va">lpi</span> <span class="op">+</span> <span class="va">fmde</span> <span class="op">+</span> <span class="va">physlm</span> <span class="op">+</span> <span class="va">disea</span> <span class="op">+</span> <span class="va">hlthg</span> <span class="op">+</span> </span>
+<span>                  <span class="va">hlthf</span> <span class="op">+</span> <span class="va">hlthp</span> <span class="op">-</span> <span class="fl">1</span>,data<span class="op">=</span><span class="va">randdata</span><span class="op">)</span></span>
+<span><span class="va">model.poisson</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">mdvis</span> <span class="op">~</span> <span class="va">LC</span> <span class="op">+</span> <span class="va">idp</span> <span class="op">+</span> <span class="va">lpi</span> <span class="op">+</span> <span class="va">fmde</span> <span class="op">+</span> <span class="va">physlm</span> <span class="op">+</span> <span class="va">disea</span> <span class="op">+</span> </span>
+<span>                       <span class="va">hlthg</span> <span class="op">+</span> <span class="va">hlthf</span> <span class="op">+</span> <span class="va">hlthp</span> <span class="op">-</span> <span class="fl">1</span>,data<span class="op">=</span><span class="va">randdata</span>,family <span class="op">=</span> <span class="va">poisson</span><span class="op">)</span></span>
+<span><span class="va">model.neg.bin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html">glm.nb</a></span><span class="op">(</span><span class="va">mdvis</span> <span class="op">~</span> <span class="va">LC</span> <span class="op">+</span> <span class="va">idp</span> <span class="op">+</span> <span class="va">lpi</span> <span class="op">+</span> <span class="va">fmde</span> <span class="op">+</span> <span class="va">physlm</span> <span class="op">+</span> <span class="va">disea</span> <span class="op">+</span></span>
+<span>                          <span class="va">hlthg</span> <span class="op">+</span> <span class="va">hlthf</span> <span class="op">+</span> <span class="va">hlthp</span> <span class="op">-</span> <span class="fl">1</span>,data<span class="op">=</span><span class="va">randdata</span><span class="op">)</span></span>
+<span><span class="va">model.neg.bin.with.intercept</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html">glm.nb</a></span><span class="op">(</span><span class="va">mdvis</span> <span class="op">~</span> <span class="va">LC</span> <span class="op">+</span> <span class="va">idp</span> <span class="op">+</span> <span class="va">lpi</span> <span class="op">+</span> <span class="va">fmde</span> <span class="op">+</span> <span class="va">physlm</span> <span class="op">+</span> <span class="va">disea</span> <span class="op">+</span> <span class="va">hlthg</span> <span class="op">+</span> </span>
+<span>           <span class="va">hlthf</span> <span class="op">+</span> <span class="va">hlthp</span>,data<span class="op">=</span><span class="va">randdata</span><span class="op">)</span></span>
+<span><span class="fu">stargazer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/stargazer/man/stargazer.html">stargazer</a></span><span class="op">(</span><span class="va">model.OLS</span>,<span class="va">model.poisson</span>,<span class="va">model.neg.bin</span>,</span>
+<span>                     <span class="va">model.neg.bin.with.intercept</span>,type<span class="op">=</span><span class="st">"text"</span>,</span>
+<span>                     no.space <span class="op">=</span> <span class="cn">TRUE</span>,omit.stat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"f"</span>,<span class="st">"ser"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## 
+## =========================================================================
+##                                     Dependent variable:                  
+##                   -------------------------------------------------------
+##                                            mdvis                         
+##                      OLS      Poisson               negative             
+##                                                     binomial             
+##                      (1)        (2)           (3)              (4)       
+## -------------------------------------------------------------------------
+## LC                -0.155***  -0.051***     -0.057***        -0.058***    
+##                    (0.020)    (0.003)       (0.006)          (0.006)     
+## idp               -0.546***  -0.183***     -0.212***        -0.268***    
+##                    (0.075)    (0.011)       (0.023)          (0.023)     
+## lpi               0.230***   0.095***       0.088***         0.041***    
+##                    (0.012)    (0.002)       (0.004)          (0.004)     
+## fmde              -0.073***  -0.029***     -0.030***        -0.038***    
+##                    (0.012)    (0.002)       (0.004)          (0.003)     
+## physlm            0.945***   0.217***       0.229***         0.269***    
+##                    (0.104)    (0.013)       (0.031)          (0.030)     
+## disea             0.177***   0.050***       0.062***         0.038***    
+##                    (0.004)   (0.0005)       (0.001)          (0.001)     
+## hlthg             0.270***   0.126***       0.068***         -0.044**    
+##                    (0.066)    (0.009)       (0.020)          (0.020)     
+## hlthf             0.455***   0.149***       0.084**           0.017      
+##                    (0.123)    (0.016)       (0.037)          (0.036)     
+## hlthp             1.537***   0.197***       0.185**          0.178**     
+##                    (0.263)    (0.027)       (0.076)          (0.074)     
+## Constant                                                     0.664***    
+##                                                              (0.025)     
+## -------------------------------------------------------------------------
+## Observations       20,190     20,190         20,190           20,190     
+## R2                  0.322                                                
+## Adjusted R2         0.322                                                
+## Log Likelihood              -64,221.340   -43,745.860      -43,384.660   
+## theta                                   0.732*** (0.010) 0.773*** (0.011)
+## Akaike Inf. Crit.           128,460.700    87,509.710       86,789.320   
+## =========================================================================
+## Note:                                         *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+<p>Models’ predictions can be obtained as follows:</p>
+<div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># prediction of beta'x, equivalent to "model.poisson$fitted.values":</span></span>
+<span><span class="va">predict_poisson.beta.x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model.poisson</span><span class="op">)</span></span>
+<span><span class="co"># prediction of the number of events (exp(beta'x)):</span></span>
+<span><span class="va">predict_poisson</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model.poisson</span>,type<span class="op">=</span><span class="st">"response"</span><span class="op">)</span></span>
+<span><span class="va">predict_NB</span> <span class="op">&lt;-</span> <span class="va">model.neg.bin</span><span class="op">$</span><span class="va">fitted.values</span></span></code></pre></div>
+<p>Let us now compute the model-implied probabilities, and let’s compare them with the frequencies observed in the data.</p>
+<div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">prop.table.data</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proportions.html">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">randdata</span><span class="op">$</span><span class="va">mdvis</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">predprob.poisson</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pscl/man/predprob.html">predprob</a></span><span class="op">(</span><span class="va">model.poisson</span><span class="op">)</span> <span class="co"># part of pscl package</span></span>
+<span><span class="va">predprob.nb</span>      <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pscl/man/predprob.html">predprob</a></span><span class="op">(</span><span class="va">model.neg.bin</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">prop.table.data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>,</span>
+<span>            <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">predprob.poisson</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>,<span class="fl">2</span>,<span class="va">mean</span><span class="op">)</span>,</span>
+<span>            <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">predprob.nb</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>,<span class="fl">2</span>,<span class="va">mean</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##              0         1         2          3          4          5
+## [1,] 0.3124319 0.1890540 0.1385339 0.09331352 0.06661714 0.04794453
+## [2,] 0.1220592 0.2230328 0.2271621 0.17173478 0.10888940 0.06244353
+## [3,] 0.3486824 0.1884640 0.1219340 0.08385899 0.05968603 0.04350209</code></pre>
+<p>It appears that the NB model is better at capturing the relatively large number of zeros than the Poisson model. This will also be the case for the Hurdle and Zero-Inflation models:</p>
+</div>
+</div>
+<div id="hurdle-model" class="section level2" number="7.3">
+<h2>
+<span class="header-section-number">7.3</span> Hurdle model<a class="anchor" aria-label="anchor" href="#hurdle-model"><i class="fas fa-link"></i></a>
+</h2>
+<p>The main objective of this model, w.r.t. the Poisson model, is to generate more zeros in the data than predicted by the previous count models. The idea is to separate the modeling of the number of zeros and that of the number of non-zero counts. Specifically, the frequency of zeros is determined by <span class="math inline">\(f_1\)</span>, the (relative) frequencies of non-zero counts are determined by <span class="math inline">\(f_2\)</span>:
+<span class="math display">\[
+f(y) = \left\{
+\begin{array}{lll}
+f_1(0) &amp; \mbox{if $y=0$},\\
+\dfrac{1-f_1(0)}{1-f_2(0)}f_2(y) &amp; \mbox{if $y&gt;0$}.
+\end{array}
+\right.
+\]</span></p>
+<p>Note that we are back to the standard Poisson model if <span class="math inline">\(f_1 \equiv f_2\)</span>. This model is straightforwardly estimated by ML.</p>
+</div>
+<div id="zero-inflated-model" class="section level2" number="7.4">
+<h2>
+<span class="header-section-number">7.4</span> Zero-inflated model<a class="anchor" aria-label="anchor" href="#zero-inflated-model"><i class="fas fa-link"></i></a>
+</h2>
+<p>The objective is the same as for the Hurdle model, the modeling is slightly different. It is based on a mixture of a binary process <span class="math inline">\(B\)</span> (p.d.f. <span class="math inline">\(f_1\)</span>) and a process <span class="math inline">\(Z\)</span> (p.d.f. <span class="math inline">\(f_2\)</span>). <span class="math inline">\(B\)</span> and <span class="math inline">\(Z\)</span> are independent. Formally:
+<span class="math display">\[
+y = B Z,
+\]</span>
+implying:
+<span class="math display">\[
+f(y) = \left\{
+\begin{array}{lll}
+f_1(0) + (1-f_1(0))f_2(0) &amp; \mbox{if $y=0$},\\
+(1-f_1(0))f_2(y) &amp; \mbox{if $y&gt;0$}.
+\end{array}
+\right.
+\]</span>
+Typically, <span class="math inline">\(f_1\)</span> corresponds to a logit model and <span class="math inline">\(f_2\)</span> is Poisson or negative binomial density. This model is easily estimated by ML techniques.</p>
+<div class="example">
+<p><span id="exm:Doctorvisits2" class="example"><strong>Example 7.2  (Number of doctor visits) </strong></span>Let us come back to the data used in Example <a href="models-of-count-data.html#exm:Doctorvisits">7.1</a>, and estimate Hurdle and a zero-inflation models:</p>
+<!-- # See Subsection 2.2 of https://cran.r-project.org/web/packages/pscl/vignettes/countreg.pdf -->
+<div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model.hurdle</span> <span class="op">&lt;-</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/pscl/man/hurdle.html">hurdle</a></span><span class="op">(</span><span class="va">mdvis</span> <span class="op">~</span> <span class="va">LC</span> <span class="op">+</span> <span class="va">idp</span> <span class="op">+</span> <span class="va">lpi</span> <span class="op">+</span> <span class="va">fmde</span> <span class="op">+</span> <span class="va">physlm</span> <span class="op">+</span> <span class="va">disea</span> <span class="op">+</span> <span class="va">hlthg</span> <span class="op">+</span> <span class="va">hlthf</span> <span class="op">+</span> </span>
+<span>           <span class="va">hlthp</span>, data<span class="op">=</span><span class="va">randdata</span>,</span>
+<span>         dist <span class="op">=</span> <span class="st">"poisson"</span>, zero.dist <span class="op">=</span> <span class="st">"binomial"</span>, link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span></span>
+<span><span class="va">model.zeroinfl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pscl/man/zeroinfl.html">zeroinfl</a></span><span class="op">(</span><span class="va">mdvis</span> <span class="op">~</span> <span class="va">LC</span> <span class="op">+</span> <span class="va">idp</span> <span class="op">+</span> <span class="va">lpi</span> <span class="op">+</span> <span class="va">fmde</span> <span class="op">+</span> <span class="va">physlm</span> <span class="op">+</span></span>
+<span>                             <span class="va">disea</span> <span class="op">+</span> <span class="va">hlthg</span> <span class="op">+</span> <span class="va">hlthf</span> <span class="op">+</span> <span class="va">hlthp</span>, data<span class="op">=</span><span class="va">randdata</span>,</span>
+<span>                           dist <span class="op">=</span> <span class="st">"poisson"</span>, link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/stargazer/man/stargazer.html">stargazer</a></span><span class="op">(</span><span class="va">model.hurdle</span>,<span class="va">model.zeroinfl</span>,zero.component<span class="op">=</span><span class="cn">FALSE</span>,</span>
+<span>          no.space<span class="op">=</span><span class="cn">TRUE</span>,type<span class="op">=</span><span class="st">"text"</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## 
+## ===========================================
+##                    Dependent variable:     
+##                ----------------------------
+##                           mdvis            
+##                    hurdle     zero-inflated
+##                                count data  
+##                     (1)            (2)     
+## -------------------------------------------
+## LC               -0.015***      -0.015***  
+##                   (0.003)        (0.003)   
+## idp              -0.085***      -0.086***  
+##                   (0.011)        (0.011)   
+## lpi               0.010***      0.010***   
+##                   (0.002)        (0.002)   
+## fmde             -0.021***      -0.021***  
+##                   (0.002)        (0.002)   
+## physlm            0.231***      0.231***   
+##                   (0.012)        (0.012)   
+## disea             0.022***      0.022***   
+##                   (0.001)        (0.001)   
+## hlthg             0.027***      0.026***   
+##                   (0.010)        (0.010)   
+## hlthf             0.147***      0.146***   
+##                   (0.016)        (0.016)   
+## hlthp             0.304***      0.303***   
+##                   (0.026)        (0.026)   
+## Constant          1.133***      1.133***   
+##                   (0.012)        (0.012)   
+## -------------------------------------------
+## Observations       20,190        20,190    
+## Log Likelihood  -54,772.100    -54,772.550 
+## ===========================================
+## Note:           *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/stargazer/man/stargazer.html">stargazer</a></span><span class="op">(</span><span class="va">model.hurdle</span>,<span class="va">model.zeroinfl</span>,zero.component<span class="op">=</span><span class="cn">TRUE</span>,</span>
+<span>          no.space<span class="op">=</span><span class="cn">TRUE</span>,type<span class="op">=</span><span class="st">"text"</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## 
+## ===========================================
+##                    Dependent variable:     
+##                ----------------------------
+##                           mdvis            
+##                    hurdle     zero-inflated
+##                                count data  
+##                     (1)            (2)     
+## -------------------------------------------
+## LC               -0.150***      0.154***   
+##                   (0.010)        (0.011)   
+## idp              -0.631***      0.637***   
+##                   (0.038)        (0.040)   
+## lpi               0.102***      -0.105***  
+##                   (0.007)        (0.007)   
+## fmde             -0.062***      0.060***   
+##                   (0.006)        (0.006)   
+## physlm            0.239***      -0.203***  
+##                   (0.056)        (0.058)   
+## disea             0.062***      -0.059***  
+##                   (0.003)        (0.003)   
+## hlthg            -0.142***      0.158***   
+##                   (0.034)        (0.036)   
+## hlthf            -0.352***      0.396***   
+##                   (0.062)        (0.064)   
+## hlthp              -0.181         0.233    
+##                   (0.149)        (0.151)   
+## Constant          0.411***      -0.528***  
+##                   (0.044)        (0.047)   
+## -------------------------------------------
+## Observations       20,190        20,190    
+## Log Likelihood  -54,772.100    -54,772.550 
+## ===========================================
+## Note:           *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+<p>Let us test the importance of <code>LC</code> in the model using a Wald test:</p>
+<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Test whether LC is important in the model:</span></span>
+<span><span class="va">model.hurdle.reduced</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html">update</a></span><span class="op">(</span><span class="va">model.hurdle</span>,<span class="va">.</span><span class="op">~</span><span class="va">.</span><span class="op">-</span><span class="va">LC</span><span class="op">)</span></span>
+<span><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/waldtest.html">waldtest</a></span><span class="op">(</span><span class="va">model.hurdle</span>, <span class="va">model.hurdle.reduced</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## Wald test
+## 
+## Model 1: mdvis ~ LC + idp + lpi + fmde + physlm + disea + hlthg + hlthf + 
+##     hlthp
+## Model 2: mdvis ~ idp + lpi + fmde + physlm + disea + hlthg + hlthf + hlthp
+##   Res.Df Df  Chisq Pr(&gt;Chisq)    
+## 1  20170                         
+## 2  20172 -2 247.64  &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+<p>Finally, we compare average model-implied probabilities with the frequencies observed in the data:</p>
+<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">predprob.hurdle</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pscl/man/predprob.html">predprob</a></span><span class="op">(</span><span class="va">model.hurdle</span><span class="op">)</span></span>
+<span><span class="va">predprob.zeroinfl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pscl/man/predprob.html">predprob</a></span><span class="op">(</span><span class="va">model.zeroinfl</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">prop.table.data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">predprob.poisson</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>,<span class="fl">2</span>,<span class="va">mean</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">predprob.nb</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>,<span class="fl">2</span>,<span class="va">mean</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">predprob.hurdle</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>,<span class="fl">2</span>,<span class="va">mean</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">predprob.zeroinfl</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>,<span class="fl">2</span>,<span class="va">mean</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##              0          1         2          3          4          5
+## [1,] 0.3124319 0.18905399 0.1385339 0.09331352 0.06661714 0.04794453
+## [2,] 0.1220592 0.22303277 0.2271621 0.17173478 0.10888940 0.06244353
+## [3,] 0.3486824 0.18846395 0.1219340 0.08385899 0.05968603 0.04350209
+## [4,] 0.3124319 0.06056959 0.1083120 0.13262624 0.12553899 0.09847017
+## [5,] 0.3124684 0.06053026 0.1082799 0.13262562 0.12556531 0.09850218</code></pre>
+</div>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="tobit-and-sample-selection-models.html"><span class="header-section-number">6</span> Tobit and sample-selection models</a></div>
+<div class="next"><a href="append.html"><span class="header-section-number">8</span> Appendix</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#models-of-count-data"><span class="header-section-number">7</span> Models of Count Data</a></li>
+<li><a class="nav-link" href="#poisson-model"><span class="header-section-number">7.1</span> Poisson model</a></li>
+<li><a class="nav-link" href="#negative-binomial-model"><span class="header-section-number">7.2</span> Negative binomial model</a></li>
+<li><a class="nav-link" href="#hurdle-model"><span class="header-section-number">7.3</span> Hurdle model</a></li>
+<li><a class="nav-link" href="#zero-inflated-model"><span class="header-section-number">7.4</span> Zero-inflated model</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Micro-Econometrics</strong>" was written by Jean-Paul Renne. It was last built on 2023-01-28.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

@@ -56,17 +56,17 @@ $$
 \hat{\Gamma}_{0,n}=\frac{1}{n}\sum_{i=1}^{n} h(x_i;\hat{\boldsymbol\theta}_n)h(x_{i};\hat{\boldsymbol\theta}_n)'.
 $$
 
-In a time series context, we often have correlation between $x_i$ and $x_{i+k}$, especially for small $k$'s. In this case, and if the time series $\{y_i\}$ is covariance stationary (see Def. \@ref(def:covstat)), then we have:
+In a time series context, we often have correlation between $x_i$ and $x_{i+k}$, especially for small $k$'s. In this case, and if the time series $\{y_i\}$ is covariance stationary, then we have:
 $$
 S := \sum_{\nu = -\infty}^{\infty} \Gamma_\nu,
 $$
-where $\Gamma_\nu := \mathbb{E}[h(x_i;\boldsymbol\theta_0) h(x_{i-\nu};\boldsymbol\theta_0)']$. Matrix $S$ is called the **long-run variance** of process $\{y_i\}$ (see Def. \@ref(def:LRV)).
+where $\Gamma_\nu := \mathbb{E}[h(x_i;\boldsymbol\theta_0) h(x_{i-\nu};\boldsymbol\theta_0)']$. Matrix $S$ is called the *long-run variance* of process $\{y_i\}$.
 
 For $\nu \ge 0$, let us define $\hat{\Gamma}_{\nu,n}$ by:
 $$
 \hat{\Gamma}_{\nu,n} = \frac{1}{n} \sum_{i=\nu + 1}^{n} h(x_i;\hat{\boldsymbol\theta}_n)h(x_{i-\nu};\hat{\boldsymbol\theta}_n)',
 $$
-then $S$ can be approximated by the @Newey_West_1987 formula (similar to Eq. \@ref(eq:NWest)):
+then $S$ can be approximated by the @Newey_West_1987 formula:
 \begin{equation}
 \hat{\Gamma}_{0,n} + \sum_{\nu=1}^{q}\left[1-\frac{\nu}{q+1}\right](\hat{\Gamma}_{\nu,n}+\hat{\Gamma}_{\nu,n}').	(\#eq:Shat)
 \end{equation}
@@ -927,7 +927,7 @@ It is important to note that, to implement this approach, one only has to be abl
 
 ### Example: AR(1) specification
 
-In the following example, we employ MCMC in order to estimate the posterior distributions of the three parameters defining an AR(1) model (see Section \@ref(ARsection)). The specification is as follows:
+In the following example, we employ MCMC in order to estimate the posterior distributions of the three parameters defining an AR(1) model. The specification is as follows:
 $$
 y_t = \mu + \rho y_{t-1} + \sigma \varepsilon_{t}, \quad \varepsilon_t \sim \,i.i.d.\,\mathcal{N}(0,1).
 $$

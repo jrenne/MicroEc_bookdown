@@ -1,0 +1,224 @@
+# Models of Count Data
+
+Count-data models aim at explaining dependent variables $y_i$ that take integer values. Typically, one may want to account for the number of doctor visits, of customers, of hospital stays, of borrowers' defaults, of recreational trips, of accidents.  Quite often, these data feature large proportion of zeros (see, e.g., Table 20.1 in @Cameron_Trivedi_2005), and/or are skewed to the right.
+
+
+## Poisson model
+
+The most basic count-data model is the Poisson model. In this model, we have $y \sim \mathcal{P}(\mu)$, i.e.
+$$
+\mathbb{P}(y=k) = \frac{\mu^k e^{-\mu}}{k!},
+$$
+implying $\mathbb{E}(y) = \mathbb{V}ar(y) = \mu$.
+
+the Poisson parameter, $\mu$, is then assumed to depend on some observed variables, gathered in vector $\bv{x}_i$ for entity $i$. To ensure that $\mu_i \ge 0$, it is common to take $\mu_i = \exp(\boldsymbol\beta'\bv{x}_i)$, which gives:
+$$
+y_i \sim \mathcal{P}(\exp[\boldsymbol\beta'\bv{x}_i]).
+$$
+
+The Poisson regression is intrinsically heteroskedastic (since $\mathbb{V}ar(y_i) = \mu_i = \exp(\boldsymbol\beta'\bv{x}_i)$).
+
+Under the assumption of independence across entities, the log-likelihood is given by: 
+$$
+\log \mathcal{L}(\boldsymbol\beta;\bv{y},\bv{X}) = \sum_{i=1}^n (y_i \boldsymbol\beta'\bv{x}_i - \exp[\boldsymbol\beta'\bv{x}_i] - \ln[y_i!]).
+$$
+The first-order condition to get the MLE is:
+\begin{equation}
+\sum_{i=1}^n (y_i - \exp[\boldsymbol\beta'\bv{x}_i])\bv{x}_i = \underbrace{\bv{0}}_{K \times 1}. (\#eq:FOCPoisson)
+\end{equation}
+
+Eq. \@ref(eq:FOCPoisson) is equivalent to what would define the **Pseudo Maximum-Likelihood** estimator of $\boldsymbol\beta$ in the (misspecified) model 
+$$
+y_i \sim i.i.d.\,\mathcal{N}(\exp[\boldsymbol\beta'\bv{x}_i],\sigma^2).
+$$
+That is, Eq. \@ref(eq:FOCPoisson) also characterizes the (true) ML estimator of $\boldsymbol\beta$ in the previous model.
+
+Since $\mathbb{E}(y_i|\bv{x}_i) = \exp(\boldsymbol\beta'\bv{x}_i)$, we have:
+$$
+y_i = \exp(\boldsymbol\beta'\bv{x}_i) + \varepsilon_i,
+$$
+with $\mathbb{E}(\varepsilon_i|\bv{x}_i) = 0$. This notably implies that the (N)LS estimator of $\boldsymbol\beta$ is consistent.
+
+How to interpret regression coefficients (the components of $\boldsymbol\beta$)? We have:
+$$
+\frac{\partial \mathbb{E}(y_i|\bv{x}_i)}{\partial x_{i,j}} = \beta_j \exp(\boldsymbol\beta'\bv{x}_i),
+$$
+which depends on the considered individual.
+
+The average estimated response is:
+$$
+\widehat{\beta}_j \frac{1}{n}\sum_{i=1}^n  \exp(\widehat{\boldsymbol\beta}'\bv{x}_i),
+$$
+which is equal to $\widehat{\beta}_j \overline{y}$ if the model includes a constant (e.g., if $x_{1,i}=1$ for all entities $i$).
+
+The limitation of the standard Poisson model is that the distribution of $y_i$ conditional on $\bv{x}_i$ depends on a single parameter ($\mu_i$). Besides, there is often a tension between fitting the fraction of zeros, i.e. $\mathbb{P}(y_i=0|\bv{x}_i)=\exp[-\exp(\boldsymbol\beta'\bv{x}_i)]$, and the distribution of $y_i|\bv{x}_i,y_i>0$. The following models (negative binomial, or NB model, the Hurdle model, and the Zero-Inflated model) have been designed to address these points.
+
+
+## Negative binomial model
+
+In the negative binomial model, we have:
+$$
+y_i|\lambda_i \sim \mathcal{P}(\lambda_i),
+$$
+but $\lambda_i$ is now random. Specifically, it takes the form:
+$$
+\lambda_i = \nu_i \times \exp(\boldsymbol\beta'\bv{x}_i),
+$$
+where $\nu_i \sim \,i.i.d.\,\Gamma(\underbrace{\delta}_{\mbox{shape}},\underbrace{1/\delta}_{\mbox{scale}})$. That is, the p.d.f. of $\nu_i$ is:
+$$
+g(\nu) = \frac{\nu^{\delta - 1}e^{-\nu\delta}\delta^\delta}{\Gamma(\delta)},
+$$
+where $\Gamma:\,z \mapsto \int_0^{+\infty}t^{z-1}e^{-t}dt$ (and $\Gamma(k+1)=k!$).
+
+This notably implies that:
+$$
+\mathbb{E}(\nu_i) = 1 \quad \mbox{and} \quad \mathbb{V}ar(\nu) = \frac{1}{\delta}.
+$$
+
+
+Hence, the p.d.f. of $y_i$ conditional on $\mu$ and $\delta$ (with $\mu=\exp(\boldsymbol\beta'\bv{x}_i)$) is obtained  as a mixture of densities:
+$$
+\mathbb{P}(y_i=k|\exp(\boldsymbol\beta'\bv{x}_i)=\mu;\delta)=\int_0^\infty \frac{e^{-\mu \nu}(\mu \nu)^k}{k!} \frac{\nu^{\delta - 1}e^{-\nu\delta}\delta^\delta}{\Gamma(\delta)} d \nu.
+$$
+
+It can be shown that:
+$$
+\mathbb{E}(y|\bv{x}) = \mu \quad \mbox{and}\quad \mathbb{V}ar(y|\bv{x}) = \mu\left(1+\alpha \mu\right),
+$$
+where $\exp(\boldsymbol\beta'\bv{x}_i)=\mu$ and $\alpha = 1/\delta$.
+
+We have one additional degree of freedom w.r.t. the Poisson model  ($\alpha$).
+
+Note that $\mathbb{V}ar(y|\bv{x}) > \mathbb{E}(y|\bv{x})$ (which is often called for by the data). Moreover, the conditional variance is quadratic in the mean:
+$$
+\mathbb{V}ar(y|\bv{x}) = \mu+\alpha \mu^2.
+$$
+The previous expression is the basis of the so-called **NB2** specification. If $\delta$ is replaced with $\mu/\gamma$, then we get the **NB1** model:
+$$
+\mathbb{V}ar(y|\bv{x}) = \mu(1+\gamma).
+$$
+
+:::{.example #Doctorvisits name="Number of doctor visits"}
+
+The following example compares different specifications, namely a linear regression model, a Poisson model, and a NB model, to account for the number of doctor visits. The dataset (``randdata`) is the one used in Chapter 20 of @Cameron_Trivedi_2005 (available on [that page](http://cameron.econ.ucdavis.edu/mmabook/mmadata.html)).
+
+```{r countdata1, warning=FALSE, message=FALSE, fig.cap="Distribution of the number of doctor visits.", fig.asp = .6, out.width = "95%", fig.align = 'left-aligned'}
+library(AEC)
+library(COUNT)
+library(pscl) # for predprob function and hurdle model
+par(plt=c(.15,.95,.1,.95))
+plot(table(randdata$mdvis))
+```
+
+```{r countdata2, warning=FALSE, message=FALSE}
+randdata$LC <- log(1 + randdata$coins)
+model.OLS <- lm(mdvis ~ LC + idp + lpi + fmde + physlm + disea + hlthg + 
+                  hlthf + hlthp - 1,data=randdata)
+model.poisson <- glm(mdvis ~ LC + idp + lpi + fmde + physlm + disea + 
+                       hlthg + hlthf + hlthp - 1,data=randdata,family = poisson)
+model.neg.bin <- glm.nb(mdvis ~ LC + idp + lpi + fmde + physlm + disea +
+                          hlthg + hlthf + hlthp - 1,data=randdata)
+model.neg.bin.with.intercept <- 
+  glm.nb(mdvis ~ LC + idp + lpi + fmde + physlm + disea + hlthg + 
+           hlthf + hlthp,data=randdata)
+stargazer::stargazer(model.OLS,model.poisson,model.neg.bin,
+                     model.neg.bin.with.intercept,type="text",
+                     no.space = TRUE,omit.stat = c("f","ser"))
+```
+
+Models' predictions can be obtained as follows:
+
+```{r countdata3, warning=FALSE, message=FALSE}
+# prediction of beta'x, equivalent to "model.poisson$fitted.values":
+predict_poisson.beta.x <- predict(model.poisson)
+# prediction of the number of events (exp(beta'x)):
+predict_poisson <- predict(model.poisson,type="response")
+predict_NB <- model.neg.bin$fitted.values
+```
+
+Let us now compute the model-implied probabilities, and let's compare them with the frequencies observed in the data.
+
+```{r countdata4, warning=FALSE, message=FALSE}
+prop.table.data  <- prop.table(table(randdata$mdvis))
+predprob.poisson <- predprob(model.poisson) # part of pscl package
+predprob.nb      <- predprob(model.neg.bin)
+print(rbind(prop.table.data[1:6],
+            apply(predprob.poisson[,1:6],2,mean),
+            apply(predprob.nb[,1:6],2,mean)))
+```
+
+It appears that the NB model is better at capturing the relatively large number of zeros than the Poisson model. This will also be the case for the Hurdle and Zero-Inflation models:
+:::
+
+## Hurdle model
+
+The main objective of this model, w.r.t. the Poisson model, is to generate more zeros in the data than predicted by the previous count models. The idea is to separate the modeling of the number of zeros and that of the number of non-zero counts. Specifically, the frequency of zeros is determined by $f_1$, the (relative) frequencies of non-zero counts are determined by $f_2$:
+$$
+f(y) = \left\{
+\begin{array}{lll}
+f_1(0) & \mbox{if $y=0$},\\
+\dfrac{1-f_1(0)}{1-f_2(0)}f_2(y) & \mbox{if $y>0$}.
+\end{array}
+\right.
+$$
+
+Note that we are back to the standard Poisson model if $f_1 \equiv f_2$. This model is straightforwardly estimated by ML.
+
+
+## Zero-inflated model
+
+The objective is the same as for the Hurdle model, the modeling is slightly different. It is based on a mixture of a binary process $B$ (p.d.f. $f_1$) and a process $Z$ (p.d.f. $f_2$). $B$ and $Z$ are independent. Formally:
+$$
+y = B Z,
+$$
+implying:
+$$
+f(y) = \left\{
+\begin{array}{lll}
+f_1(0) + (1-f_1(0))f_2(0) & \mbox{if $y=0$},\\
+(1-f_1(0))f_2(y) & \mbox{if $y>0$}.
+\end{array}
+\right.
+$$
+Typically, $f_1$ corresponds to a logit model and $f_2$ is Poisson or negative binomial density. This model is easily estimated by ML techniques.
+
+:::{.example #Doctorvisits2 name="Number of doctor visits"}
+
+Let us come back to the data used in Example \@ref(exm:Doctorvisits), and estimate Hurdle and a zero-inflation models:
+
+<!-- # See Subsection 2.2 of https://cran.r-project.org/web/packages/pscl/vignettes/countreg.pdf -->
+
+```{r countdata6}
+model.hurdle <- 
+  hurdle(mdvis ~ LC + idp + lpi + fmde + physlm + disea + hlthg + hlthf + 
+           hlthp, data=randdata,
+         dist = "poisson", zero.dist = "binomial", link = "logit")
+model.zeroinfl <- zeroinfl(mdvis ~ LC + idp + lpi + fmde + physlm +
+                             disea + hlthg + hlthf + hlthp, data=randdata,
+                           dist = "poisson", link = "logit")
+stargazer(model.hurdle,model.zeroinfl,zero.component=FALSE,
+          no.space=TRUE,type="text")
+stargazer(model.hurdle,model.zeroinfl,zero.component=TRUE,
+          no.space=TRUE,type="text")
+```
+
+Let us test the importance of `LC` in the model using a Wald test:
+```{r countdata7}
+# Test whether LC is important in the model:
+model.hurdle.reduced <- update(model.hurdle,.~.-LC)
+lmtest::waldtest(model.hurdle, model.hurdle.reduced)
+```
+
+Finally, we compare average model-implied probabilities with the frequencies observed in the data:
+
+```{r countdata8}
+predprob.hurdle   <- predprob(model.hurdle)
+predprob.zeroinfl <- predprob(model.zeroinfl)
+print(rbind(prop.table.data[1:6],
+  apply(predprob.poisson[,1:6],2,mean),
+  apply(predprob.nb[,1:6],2,mean),
+  apply(predprob.hurdle[,1:6],2,mean),
+  apply(predprob.zeroinfl[,1:6],2,mean)))
+```
+:::
+

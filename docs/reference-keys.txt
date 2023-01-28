@@ -205,8 +205,6 @@ eq:FOCPoisson
 exm:Doctorvisits
 fig:countdata1
 exm:Doctorvisits2
-eq:PCA11
-fig:USydsPCA1
 def:determinant
 prp:determinant
 def:MoorPenrose
@@ -268,7 +266,6 @@ eq:lm3
 eq:multiplier
 eq:lm20
 eq:lr10
-eq:1
 tab:Normal
 tab:Student
 tab:Chi2
@@ -321,7 +318,6 @@ bayesian-approach
 introduction
 monte-carlo-markov-chains
 example-ar1-specification
-microeconometrics
 binary-choice-models
 latent
 Avregressors
@@ -333,6 +329,7 @@ multiple-choice-models
 ordered-case
 MNL
 nested-logits
+tobit-and-sample-selection-models
 tobit
 SSM
 models-of-count-data
@@ -341,7 +338,6 @@ negative-binomial-model
 hurdle-model
 zero-inflated-model
 append
-PCAapp
 LinAlgebra
 variousResults
 moments-and-statistics
@@ -352,5 +348,4 @@ GaussianVar
 AppendixProof
 additional-codes
 App:GEV
-IRFDELTA
 statistical-tables

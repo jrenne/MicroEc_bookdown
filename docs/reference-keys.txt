@@ -106,6 +106,7 @@ eq:EY1a
 eq:EY0a
 eq:DiD
 fig:figAbadie
+exm:DiDexm
 fig:figMeyer
 def:GMM
 eq:consistGMM
@@ -301,7 +302,6 @@ introduction-to-program-evaluation
 presentation-of-the-problem
 randomized-controlled-trials-rcts
 difference-in-difference-did-approach
-application-of-the-did-approach
 estimation-methods
 secGMM
 definition-of-the-gmm-estimator

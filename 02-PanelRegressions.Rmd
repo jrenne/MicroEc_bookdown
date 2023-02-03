@@ -934,9 +934,7 @@ In practice, implementing this approach consists in running a linear regression 
 
 <!-- Diff-in-Diff: [Card and Krueger (1994)](https://towardsdatascience.com/analyze-causal-effect-using-diff-in-diff-model-85e07b17e7b7) -->
 
-
-### Application of the DiD approach
-
+:::{.example #DiDexm name="Workers' compensation for injury on time out of work"}
 This example is based on the data used in @Meyer_Viscusi_Durbin_1995. This dataset is part of the `wooldridge` package. This paper examines the effect of workers' compensation for injury on time out of work. It exploits a **natural experiment** approach of comparing individuals injured before and after increases in the maximum weekly benefit amount. Specifically, in 1980, the cap on weekly earnings covered by worker’s compensation was increased in Kentucky and Michigan. Let us check whether this new policy was followed by an increase in the amount of time workers spent unemployed (for example, higher compensation may reduce workers' incentives to avoid injury).
 
 As shown in Figure \@ref(fig:figMeyer), the measure has only affected high-earning workers. The idea exploited by @Meyer_Viscusi_Durbin_1995 was to compare the increase in time out of work before-after 1980 for higher-earnings workers on the one hand (entities who received the treatment) and low-earnings workers on the other hand (control group).
@@ -973,6 +971,9 @@ stargazer::stargazer(eq1,eq2,eq3,type="text",
                                       c("injury dummy","no","yes","yes")),
                      order = c(1,2,18,3:17,19,20),omit.stat = c("f","ser"))
 ```
+
+:::
+
 
 
 

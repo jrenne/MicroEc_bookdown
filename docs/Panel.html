@@ -1012,12 +1012,8 @@ Figure 2.6: Source: Abadie et al., (1998).
 </div>
 <p>In practice, implementing this approach consists in running a linear regression of the type of Eq. <a href="Panel.html#eq:DiD">(2.12)</a>. These regressions also usually involve controls on top of the fixed effects <span class="math inline">\(\mu_i\)</span>. As illustrated in the next subsection, the parameter of interest (<span class="math inline">\(\beta_1\)</span>) is often associated with an interaction term.</p>
 <!-- Diff-in-Diff: [Card and Krueger (1994)](https://towardsdatascience.com/analyze-causal-effect-using-diff-in-diff-model-85e07b17e7b7) -->
-</div>
-<div id="application-of-the-did-approach" class="section level3" number="2.6.4">
-<h3>
-<span class="header-section-number">2.6.4</span> Application of the DiD approach<a class="anchor" aria-label="anchor" href="#application-of-the-did-approach"><i class="fas fa-link"></i></a>
-</h3>
-<p>This example is based on the data used in <span class="citation">Meyer, Viscusi, and Durbin (<a href="references.html#ref-Meyer_Viscusi_Durbin_1995" role="doc-biblioref">1995</a>)</span>. This dataset is part of the <code>wooldridge</code> package. This paper examines the effect of workers’ compensation for injury on time out of work. It exploits a <strong>natural experiment</strong> approach of comparing individuals injured before and after increases in the maximum weekly benefit amount. Specifically, in 1980, the cap on weekly earnings covered by worker’s compensation was increased in Kentucky and Michigan. Let us check whether this new policy was followed by an increase in the amount of time workers spent unemployed (for example, higher compensation may reduce workers’ incentives to avoid injury).</p>
+<div class="example">
+<p><span id="exm:DiDexm" class="example"><strong>Example 2.3  (Workers' compensation for injury on time out of work) </strong></span>This example is based on the data used in <span class="citation">Meyer, Viscusi, and Durbin (<a href="references.html#ref-Meyer_Viscusi_Durbin_1995" role="doc-biblioref">1995</a>)</span>. This dataset is part of the <code>wooldridge</code> package. This paper examines the effect of workers’ compensation for injury on time out of work. It exploits a <strong>natural experiment</strong> approach of comparing individuals injured before and after increases in the maximum weekly benefit amount. Specifically, in 1980, the cap on weekly earnings covered by worker’s compensation was increased in Kentucky and Michigan. Let us check whether this new policy was followed by an increase in the amount of time workers spent unemployed (for example, higher compensation may reduce workers’ incentives to avoid injury).</p>
 <p>As shown in Figure <a href="Panel.html#fig:figMeyer">2.7</a>, the measure has only affected high-earning workers. The idea exploited by <span class="citation">Meyer, Viscusi, and Durbin (<a href="references.html#ref-Meyer_Viscusi_Durbin_1995" role="doc-biblioref">1995</a>)</span> was to compare the increase in time out of work before-after 1980 for higher-earnings workers on the one hand (entities who received the treatment) and low-earnings workers on the other hand (control group).</p>
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:figMeyer"></span>
@@ -1082,6 +1078,7 @@ Figure 2.7: Source: Meyer et al., (1995).
 ## Adjusted R2         0.020     0.316     0.046  
 ## ===============================================
 ## Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+</div>
 
 </div>
 </div>
@@ -1104,7 +1101,6 @@ Figure 2.7: Source: Meyer et al., (1995).
 <li><a class="nav-link" href="#presentation-of-the-problem"><span class="header-section-number">2.6.1</span> Presentation of the problem</a></li>
 <li><a class="nav-link" href="#randomized-controlled-trials-rcts"><span class="header-section-number">2.6.2</span> Randomized controlled trials (RCTs)</a></li>
 <li><a class="nav-link" href="#difference-in-difference-did-approach"><span class="header-section-number">2.6.3</span> Difference-in-Difference (DiD) approach</a></li>
-<li><a class="nav-link" href="#application-of-the-did-approach"><span class="header-section-number">2.6.4</span> Application of the DiD approach</a></li>
 </ul>
 </li>
 </ul>
@@ -1123,7 +1119,7 @@ Figure 2.7: Source: Meyer et al., (1995).
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Micro-Econometrics</strong>" was written by Jean-Paul Renne. It was last built on 2023-01-28.</p>
+    <p>"<strong>Micro-Econometrics</strong>" was written by Jean-Paul Renne. It was last built on 2023-02-03.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

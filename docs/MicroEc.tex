@@ -131,7 +131,7 @@
 
 \title{Micro-Econometrics}
 \author{Jean-Paul Renne}
-\date{2023-01-28}
+\date{2023-02-03}
 
 \usepackage{amsthm}
 \newtheorem{theorem}{Theorem}[chapter]
@@ -3095,8 +3095,8 @@ This is illustrated by Figure \ref{fig:figAbadie}, which represents the generic 
 
 In practice, implementing this approach consists in running a linear regression of the type of Eq. \eqref{eq:DiD}. These regressions also usually involve controls on top of the fixed effects \(\mu_i\). As illustrated in the next subsection, the parameter of interest (\(\beta_1\)) is often associated with an interaction term.
 
-\hypertarget{application-of-the-did-approach}{%
-\subsection{Application of the DiD approach}\label{application-of-the-did-approach}}
+\begin{example}[Workers' compensation for injury on time out of work]
+\protect\hypertarget{exm:DiDexm}{}\label{exm:DiDexm}
 
 This example is based on the data used in \citet{Meyer_Viscusi_Durbin_1995}. This dataset is part of the \texttt{wooldridge} package. This paper examines the effect of workers' compensation for injury on time out of work. It exploits a \textbf{natural experiment} approach of comparing individuals injured before and after increases in the maximum weekly benefit amount. Specifically, in 1980, the cap on weekly earnings covered by worker's compensation was increased in Kentucky and Michigan. Let us check whether this new policy was followed by an increase in the amount of time workers spent unemployed (for example, higher compensation may reduce workers' incentives to avoid injury).
 
@@ -3175,6 +3175,8 @@ In the table of results below, the parameter of interest is the one associated w
 ## ===============================================
 ## Note:               *p<0.1; **p<0.05; ***p<0.01
 \end{verbatim}
+
+\end{example}
 
 \hypertarget{estimation-methods}{%
 \chapter{Estimation Methods}\label{estimation-methods}}

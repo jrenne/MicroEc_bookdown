@@ -108,7 +108,10 @@ library(COUNT)
 library(pscl) # for predprob function and hurdle model
 par(plt=c(.15,.95,.1,.95))
 plot(table(randdata$mdvis))
+c(mean(randdata$mdvis),var(randdata$mdvis))
 ```
+
+As shown on the previous line, the variance of the number of visits is much larger than its expectation. This suggests that a Poisson model would be misspecified.
 
 ```{r countdata2, warning=FALSE, message=FALSE}
 randdata$LC <- log(1 + randdata$coins)
@@ -125,6 +128,8 @@ stargazer::stargazer(model.OLS,model.poisson,model.neg.bin,
                      model.neg.bin.with.intercept,type="text",
                      no.space = TRUE,omit.stat = c("f","ser"))
 ```
+
+In the previous table, The reported $\theta$ is the inverse of $\alpha$ appearing in $\mathbb{V}ar(y|\bv{x}) = \mu+\alpha \mu^2$ (NB2 specification). That is, the model implies that $\mathbb{V}ar(y|\bv{x}) = \mu+\mu^2/\theta$.
 
 Models' predictions can be obtained as follows:
 
@@ -189,6 +194,7 @@ Let us come back to the data used in Example \@ref(exm:Doctorvisits), and estima
 <!-- # See Subsection 2.2 of https://cran.r-project.org/web/packages/pscl/vignettes/countreg.pdf -->
 
 ```{r countdata6}
+library(stargazer)
 model.hurdle <- 
   hurdle(mdvis ~ LC + idp + lpi + fmde + physlm + disea + hlthg + hlthf + 
            hlthp, data=randdata,

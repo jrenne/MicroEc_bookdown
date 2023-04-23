@@ -59,11 +59,11 @@ Let us stress that we have two types of parameters to estimate: those included i
 
 The estimated values of the $\theta_j$'s are slightly more complicated to interpret (at least in term of sign) than in the binary case. Indeed, we have:
 $$
-\mathbb{P}(y_i \le j | \bv{x}_i) = \Phi(\alpha_{j} - \boldsymbol\theta'\bv{x}_i) \Rightarrow \frac{\partial \mathbb{P}(y_i \le j | \bv{x}_i)}{\bv{x}_i} =- \underbrace{\Phi'(\alpha_{j} - \boldsymbol\theta'\bv{x}_i)}_{>0}\boldsymbol\theta.
+\mathbb{P}(y_i \le j | \bv{x}_i) = \Phi(\alpha_{j} - \boldsymbol\theta'\bv{x}_i) \Rightarrow \frac{\partial \mathbb{P}(y_i \le j | \bv{x}_i)}{\partial\bv{x}_i} =- \underbrace{\Phi'(\alpha_{j} - \boldsymbol\theta'\bv{x}_i)}_{>0}\boldsymbol\theta.
 $$
 Hence the sign of $\theta_k$ indicates whether $\mathbb{P}(y_i \le j | \bv{x}_i)$ increases or decreases w.r.t. $x_{i,k}$ (the $k^{th}$ component of $\bv{x}_i$). By contrast:
 $$
-\frac{\partial \mathbb{P}(y_i = j | \bv{x}_i)}{\bv{x}_i} = \underbrace{\left(-F'(\alpha_{j} + \boldsymbol\theta'\bv{x}_i)+F'(\alpha_{j-1} + \boldsymbol\theta'\bv{x}_i)\right)}_{A}\boldsymbol\theta.
+\frac{\partial \mathbb{P}(y_i = j | \bv{x}_i)}{\partial\bv{x}_i} = \underbrace{\left(-\Phi'(\alpha_{j} + \boldsymbol\theta'\bv{x}_i)+\Phi'(\alpha_{j-1} + \boldsymbol\theta'\bv{x}_i)\right)}_{A}\boldsymbol\theta.
 $$
 Therefore the signs of the components of $\boldsymbol\theta$ are not necessarily those of the marginal effects. (For the sign of $A$ is a priori unknown.)
 
@@ -389,7 +389,7 @@ This approach allows for some level of correlation across the $\varepsilon_{j,k}
 
 Note that if the common component is reduced to zero (i.e. $\rho_i=1$), the model boils down to the multinomial logit model with no covariance of error terms among the alternatives.
 
-Contrary to the general multinmial model, nested logits can solve the Red-Blue problem described in Section \@ref(MNL) (see Example \@ref(exm:redbluebus)). Assume you have estimated a model specifying $U_{1} = V_{1} + \varepsilon_{1}$ (car choice) and $U_{2} = V_{2} + \varepsilon_{2}$ (red bus choice). You can then assume that the blue-bus utility is of the form $U_{3} = V_{2} + \varepsilon_{3}$ where $\varepsilon_{3}$ is perfectly correlated to $\varepsilon_{2}$. This is done by redefining the set of choices as follows:
+Contrary to the general multinomial model, nested logits can solve the Red-Blue problem described in Section \@ref(MNL) (see Example \@ref(exm:redbluebus)). Assume you have estimated a model specifying $U_{1} = V_{1} + \varepsilon_{1}$ (car choice) and $U_{2} = V_{2} + \varepsilon_{2}$ (red bus choice). You can then assume that the blue-bus utility is of the form $U_{3} = V_{2} + \varepsilon_{3}$ where $\varepsilon_{3}$ is perfectly correlated to $\varepsilon_{2}$. This is done by redefining the set of choices as follows:
 \begin{eqnarray*}
 j=1 &\Leftrightarrow& (j'=1,k=1) \\
 j=2 &\Leftrightarrow& (j'=2,k=1) \\

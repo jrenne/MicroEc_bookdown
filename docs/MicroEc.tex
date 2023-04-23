@@ -131,7 +131,7 @@
 
 \title{Micro-Econometrics}
 \author{Jean-Paul Renne}
-\date{2023-03-05}
+\date{2023-04-23}
 
 \usepackage{amsthm}
 \newtheorem{theorem}{Theorem}[chapter]
@@ -4431,7 +4431,7 @@ where \(V_{i,j}\) is the deterministic component of the utility associated with 
 \end{eqnarray}
 where \(F\) is the c.d.f. of \(\varepsilon_{i,0}-\varepsilon_{i,1}\).
 
-Note that only the difference \(\boldsymbol\theta_1-\boldsymbol\theta_0\) is identifiable (as opposed to \(\boldsymbol\theta_1\) \emph{and} \(\boldsymbol\theta_0\)). Indeed, replacing \(U\) with \(aU\) (\(a>0\)) gives the same model. This \emph{scaling} issue can be solved by fixing the variance of \(\varepsilon_{i,0}-\varepsilon_{i,1}\).
+Note that only the difference \(\boldsymbol\theta_1-\boldsymbol\theta_0\) is identifiable (as opposed to \(\boldsymbol\theta_1\) \emph{and} \(\boldsymbol\theta_0\)). Moreover, replacing \(U\) with \(aU\) (\(a>0\)) gives the same model; this \emph{scaling} issue can be solved by fixing the variance of \(\varepsilon_{i,0}-\varepsilon_{i,1}\).
 
 \begin{example}[Migration and income]
 \protect\hypertarget{exm:migration}{}\label{exm:migration}The RUM approach has been used by \citet{Nakosteen_Zimmer_1980} to study migration choices. Their model is based on the comparison of marginal costs and benefits associated with migration. The main ingredients of their approach are as follows:
@@ -4920,11 +4920,11 @@ Let us stress that we have two types of parameters to estimate: those included i
 
 The estimated values of the \(\theta_j\)'s are slightly more complicated to interpret (at least in term of sign) than in the binary case. Indeed, we have:
 \[
-\mathbb{P}(y_i \le j | \mathbf{x}_i) = \Phi(\alpha_{j} - \boldsymbol\theta'\mathbf{x}_i) \Rightarrow \frac{\partial \mathbb{P}(y_i \le j | \mathbf{x}_i)}{\mathbf{x}_i} =- \underbrace{\Phi'(\alpha_{j} - \boldsymbol\theta'\mathbf{x}_i)}_{>0}\boldsymbol\theta.
+\mathbb{P}(y_i \le j | \mathbf{x}_i) = \Phi(\alpha_{j} - \boldsymbol\theta'\mathbf{x}_i) \Rightarrow \frac{\partial \mathbb{P}(y_i \le j | \mathbf{x}_i)}{\partial\mathbf{x}_i} =- \underbrace{\Phi'(\alpha_{j} - \boldsymbol\theta'\mathbf{x}_i)}_{>0}\boldsymbol\theta.
 \]
 Hence the sign of \(\theta_k\) indicates whether \(\mathbb{P}(y_i \le j | \mathbf{x}_i)\) increases or decreases w.r.t. \(x_{i,k}\) (the \(k^{th}\) component of \(\mathbf{x}_i\)). By contrast:
 \[
-\frac{\partial \mathbb{P}(y_i = j | \mathbf{x}_i)}{\mathbf{x}_i} = \underbrace{\left(-F'(\alpha_{j} + \boldsymbol\theta'\mathbf{x}_i)+F'(\alpha_{j-1} + \boldsymbol\theta'\mathbf{x}_i)\right)}_{A}\boldsymbol\theta.
+\frac{\partial \mathbb{P}(y_i = j | \mathbf{x}_i)}{\partial\mathbf{x}_i} = \underbrace{\left(-\Phi'(\alpha_{j} + \boldsymbol\theta'\mathbf{x}_i)+\Phi'(\alpha_{j-1} + \boldsymbol\theta'\mathbf{x}_i)\right)}_{A}\boldsymbol\theta.
 \]
 Therefore the signs of the components of \(\boldsymbol\theta\) are not necessarily those of the marginal effects. (For the sign of \(A\) is a priori unknown.)
 
@@ -5294,7 +5294,7 @@ This approach allows for some level of correlation across the \(\varepsilon_{j,k
 
 Note that if the common component is reduced to zero (i.e.~\(\rho_i=1\)), the model boils down to the multinomial logit model with no covariance of error terms among the alternatives.
 
-Contrary to the general multinmial model, nested logits can solve the Red-Blue problem described in Section \ref{MNL} (see Example \ref{exm:redbluebus}). Assume you have estimated a model specifying \(U_{1} = V_{1} + \varepsilon_{1}\) (car choice) and \(U_{2} = V_{2} + \varepsilon_{2}\) (red bus choice). You can then assume that the blue-bus utility is of the form \(U_{3} = V_{2} + \varepsilon_{3}\) where \(\varepsilon_{3}\) is perfectly correlated to \(\varepsilon_{2}\). This is done by redefining the set of choices as follows:
+Contrary to the general multinomial model, nested logits can solve the Red-Blue problem described in Section \ref{MNL} (see Example \ref{exm:redbluebus}). Assume you have estimated a model specifying \(U_{1} = V_{1} + \varepsilon_{1}\) (car choice) and \(U_{2} = V_{2} + \varepsilon_{2}\) (red bus choice). You can then assume that the blue-bus utility is of the form \(U_{3} = V_{2} + \varepsilon_{3}\) where \(\varepsilon_{3}\) is perfectly correlated to \(\varepsilon_{2}\). This is done by redefining the set of choices as follows:
 \begin{eqnarray*}
 j=1 &\Leftrightarrow& (j'=1,k=1) \\
 j=2 &\Leftrightarrow& (j'=2,k=1) \\
@@ -6002,6 +6002,18 @@ The previous expression is the basis of the so-called \textbf{NB2} specification
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\FunctionTok{c}\NormalTok{(}\FunctionTok{mean}\NormalTok{(randdata}\SpecialCharTok{$}\NormalTok{mdvis),}\FunctionTok{var}\NormalTok{(randdata}\SpecialCharTok{$}\NormalTok{mdvis))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1]  2.860426 20.289300
+\end{verbatim}
+
+As shown on the previous line, the variance of the number of visits is much larger than its expectation. This suggests that a Poisson model would be misspecified.
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{randdata}\SpecialCharTok{$}\NormalTok{LC }\OtherTok{\textless{}{-}} \FunctionTok{log}\NormalTok{(}\DecValTok{1} \SpecialCharTok{+}\NormalTok{ randdata}\SpecialCharTok{$}\NormalTok{coins)}
 \NormalTok{model.OLS }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(mdvis }\SpecialCharTok{\textasciitilde{}}\NormalTok{ LC }\SpecialCharTok{+}\NormalTok{ idp }\SpecialCharTok{+}\NormalTok{ lpi }\SpecialCharTok{+}\NormalTok{ fmde }\SpecialCharTok{+}\NormalTok{ physlm }\SpecialCharTok{+}\NormalTok{ disea }\SpecialCharTok{+}\NormalTok{ hlthg }\SpecialCharTok{+} 
 \NormalTok{                  hlthf }\SpecialCharTok{+}\NormalTok{ hlthp }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{,}\AttributeTok{data=}\NormalTok{randdata)}
@@ -6058,6 +6070,8 @@ The previous expression is the basis of the so-called \textbf{NB2} specification
 ## =========================================================================
 ## Note:                                         *p<0.1; **p<0.05; ***p<0.01
 \end{verbatim}
+
+In the previous table, The reported \(\theta\) is the inverse of \(\alpha\) appearing in \(\mathbb{V}ar(y|\mathbf{x}) = \mu+\alpha \mu^2\) (NB2 specification). That is, the model implies that \(\mathbb{V}ar(y|\mathbf{x}) = \mu+\mu^2/\theta\).
 
 Models' predictions can be obtained as follows:
 
@@ -6134,6 +6148,7 @@ Let us come back to the data used in Example \ref{exm:Doctorvisits}, and estimat
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(stargazer)}
 \NormalTok{model.hurdle }\OtherTok{\textless{}{-}} 
   \FunctionTok{hurdle}\NormalTok{(mdvis }\SpecialCharTok{\textasciitilde{}}\NormalTok{ LC }\SpecialCharTok{+}\NormalTok{ idp }\SpecialCharTok{+}\NormalTok{ lpi }\SpecialCharTok{+}\NormalTok{ fmde }\SpecialCharTok{+}\NormalTok{ physlm }\SpecialCharTok{+}\NormalTok{ disea }\SpecialCharTok{+}\NormalTok{ hlthg }\SpecialCharTok{+}\NormalTok{ hlthf }\SpecialCharTok{+} 
 \NormalTok{           hlthp, }\AttributeTok{data=}\NormalTok{randdata,}

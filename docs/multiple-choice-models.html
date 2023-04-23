@@ -135,11 +135,11 @@ where <span class="math inline">\(\Phi\)</span> is the c.d.f. of <span class="ma
 <p>Let us stress that we have two types of parameters to estimate: those included in vector <span class="math inline">\(\boldsymbol\theta\)</span>, and the <span class="math inline">\(\alpha_j\)</span>’s, gathered in vector <span class="math inline">\(\boldsymbol\alpha\)</span>.</p>
 <p>The estimated values of the <span class="math inline">\(\theta_j\)</span>’s are slightly more complicated to interpret (at least in term of sign) than in the binary case. Indeed, we have:
 <span class="math display">\[
-\mathbb{P}(y_i \le j | \mathbf{x}_i) = \Phi(\alpha_{j} - \boldsymbol\theta'\mathbf{x}_i) \Rightarrow \frac{\partial \mathbb{P}(y_i \le j | \mathbf{x}_i)}{\mathbf{x}_i} =- \underbrace{\Phi'(\alpha_{j} - \boldsymbol\theta'\mathbf{x}_i)}_{&gt;0}\boldsymbol\theta.
+\mathbb{P}(y_i \le j | \mathbf{x}_i) = \Phi(\alpha_{j} - \boldsymbol\theta'\mathbf{x}_i) \Rightarrow \frac{\partial \mathbb{P}(y_i \le j | \mathbf{x}_i)}{\partial\mathbf{x}_i} =- \underbrace{\Phi'(\alpha_{j} - \boldsymbol\theta'\mathbf{x}_i)}_{&gt;0}\boldsymbol\theta.
 \]</span>
 Hence the sign of <span class="math inline">\(\theta_k\)</span> indicates whether <span class="math inline">\(\mathbb{P}(y_i \le j | \mathbf{x}_i)\)</span> increases or decreases w.r.t. <span class="math inline">\(x_{i,k}\)</span> (the <span class="math inline">\(k^{th}\)</span> component of <span class="math inline">\(\mathbf{x}_i\)</span>). By contrast:
 <span class="math display">\[
-\frac{\partial \mathbb{P}(y_i = j | \mathbf{x}_i)}{\mathbf{x}_i} = \underbrace{\left(-F'(\alpha_{j} + \boldsymbol\theta'\mathbf{x}_i)+F'(\alpha_{j-1} + \boldsymbol\theta'\mathbf{x}_i)\right)}_{A}\boldsymbol\theta.
+\frac{\partial \mathbb{P}(y_i = j | \mathbf{x}_i)}{\partial\mathbf{x}_i} = \underbrace{\left(-\Phi'(\alpha_{j} + \boldsymbol\theta'\mathbf{x}_i)+\Phi'(\alpha_{j-1} + \boldsymbol\theta'\mathbf{x}_i)\right)}_{A}\boldsymbol\theta.
 \]</span>
 Therefore the signs of the components of <span class="math inline">\(\boldsymbol\theta\)</span> are not necessarily those of the marginal effects. (For the sign of <span class="math inline">\(A\)</span> is a priori unknown.)</p>
 <div class="example">
@@ -469,7 +469,7 @@ The inclusive values can therefore be seen as measures of the relative attractiv
 </ol>
 <p>This approach allows for some level of correlation across the <span class="math inline">\(\varepsilon_{j,k}\)</span> (for a given <span class="math inline">\(j\)</span>). This can be interpreted as the existence of an (unobserved) <em>common error component</em> for the alternatives of a same nest. This component contributes to making the alternatives of a given nest more similar. In other words, this approach can accommodate a higher sensitivity (cross-elasticity) between the alternatives of a given nest.</p>
 <p>Note that if the common component is reduced to zero (i.e. <span class="math inline">\(\rho_i=1\)</span>), the model boils down to the multinomial logit model with no covariance of error terms among the alternatives.</p>
-<p>Contrary to the general multinmial model, nested logits can solve the Red-Blue problem described in Section <a href="multiple-choice-models.html#MNL">5.2</a> (see Example <a href="multiple-choice-models.html#exm:redbluebus">5.3</a>). Assume you have estimated a model specifying <span class="math inline">\(U_{1} = V_{1} + \varepsilon_{1}\)</span> (car choice) and <span class="math inline">\(U_{2} = V_{2} + \varepsilon_{2}\)</span> (red bus choice). You can then assume that the blue-bus utility is of the form <span class="math inline">\(U_{3} = V_{2} + \varepsilon_{3}\)</span> where <span class="math inline">\(\varepsilon_{3}\)</span> is perfectly correlated to <span class="math inline">\(\varepsilon_{2}\)</span>. This is done by redefining the set of choices as follows:
+<p>Contrary to the general multinomial model, nested logits can solve the Red-Blue problem described in Section <a href="multiple-choice-models.html#MNL">5.2</a> (see Example <a href="multiple-choice-models.html#exm:redbluebus">5.3</a>). Assume you have estimated a model specifying <span class="math inline">\(U_{1} = V_{1} + \varepsilon_{1}\)</span> (car choice) and <span class="math inline">\(U_{2} = V_{2} + \varepsilon_{2}\)</span> (red bus choice). You can then assume that the blue-bus utility is of the form <span class="math inline">\(U_{3} = V_{2} + \varepsilon_{3}\)</span> where <span class="math inline">\(\varepsilon_{3}\)</span> is perfectly correlated to <span class="math inline">\(\varepsilon_{2}\)</span>. This is done by redefining the set of choices as follows:
 <span class="math display">\[\begin{eqnarray*}
 j=1 &amp;\Leftrightarrow&amp; (j'=1,k=1) \\
 j=2 &amp;\Leftrightarrow&amp; (j'=2,k=1) \\
@@ -581,7 +581,7 @@ which depends on the expected utilities of all alternatives in nest <span class=
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Micro-Econometrics</strong>" was written by Jean-Paul Renne. It was last built on 2023-03-05.</p>
+    <p>"<strong>Micro-Econometrics</strong>" was written by Jean-Paul Renne. It was last built on 2023-04-23.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

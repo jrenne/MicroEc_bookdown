@@ -6,16 +6,19 @@
   12pt,
 ]{book}
 \usepackage{amsmath,amssymb}
-\usepackage{lmodern}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -45,13 +48,13 @@
 \newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
 \newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
 \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
 \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
 \newcommand{\BuiltInTok}[1]{#1}
 \newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
 \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
 \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
 \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
 \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
@@ -59,7 +62,7 @@
 \newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
 \newcommand{\ExtensionTok}[1]{#1}
 \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
 \newcommand{\ImportTok}[1]{#1}
 \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
@@ -68,7 +71,7 @@
 \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
 \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
 \newcommand{\RegionMarkerTok}[1]{#1}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
 \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
@@ -122,7 +125,7 @@
 \bibliographystyle{apalike}
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{same}
 \hypersetup{
   pdftitle={Micro-Econometrics},
   pdfauthor={Jean-Paul Renne},
@@ -131,7 +134,7 @@
 
 \title{Micro-Econometrics}
 \author{Jean-Paul Renne}
-\date{2023-04-23}
+\date{2025-02-13}
 
 \usepackage{amsthm}
 \newtheorem{theorem}{Theorem}[chapter]
@@ -1986,7 +1989,7 @@ To begin with, let us define the variables we want to consider:
 \NormalTok{credit}\SpecialCharTok{$}\NormalTok{funded\_amnt2 }\OtherTok{\textless{}{-}}\NormalTok{ (credit}\SpecialCharTok{$}\NormalTok{funded\_amnt)}\SpecialCharTok{\^{}}\DecValTok{2}
 \NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(credit,}
             \AttributeTok{select =} \FunctionTok{c}\NormalTok{(delinq\_2yrs,annual\_inc,annual\_inc2,log\_annual\_inc,}
-\NormalTok{                       dti,installment,verification\_status,funded\_amnt,}
+\NormalTok{                       dti,installment,funded\_amnt,}
 \NormalTok{                       funded\_amnt2,log\_funded\_amnt,pub\_rec,emp\_length\_10,}
 \NormalTok{                       owner,renter,pub\_rec\_bankruptcies,revol\_util,revol\_bal))}
 \end{Highlighting}
@@ -1998,6 +2001,9 @@ Let us standardize the data:
 \begin{Highlighting}[]
 \NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{scale}\NormalTok{(credit}\SpecialCharTok{$}\NormalTok{int\_rate)}
 \NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{scale}\NormalTok{(x)}
+\NormalTok{indic\_complete\_cases }\OtherTok{\textless{}{-}} \FunctionTok{complete.cases}\NormalTok{(x)}
+\NormalTok{y }\OtherTok{\textless{}{-}}\NormalTok{ y[indic\_complete\_cases]  }\CommentTok{\# to remove observations with NaN\textquotesingle{}s}
+\NormalTok{x }\OtherTok{\textless{}{-}}\NormalTok{ x[indic\_complete\_cases,] }\CommentTok{\# to remove observations with NaN\textquotesingle{}s}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2047,25 +2053,24 @@ Let us take two values of \(\lambda\) and see the associated estimated parameter
 \end{Shaded}
 
 \begin{verbatim}
-##                               [,1]          [,2]
-## (Intercept)          -1.044971e-15  1.088731e-14
-## delinq_2yrs           6.308870e-02  6.893527e-02
-## annual_inc            0.000000e+00  4.595653e-03
-## annual_inc2           0.000000e+00  0.000000e+00
-## log_annual_inc        0.000000e+00 -3.612382e-02
-## dti                   0.000000e+00  2.242246e-02
-## installment           1.476796e-01  8.228729e+00
-## verification_status   0.000000e+00 -9.750047e-04
-## funded_amnt           0.000000e+00 -7.309169e+00
-## funded_amnt2          0.000000e+00 -4.711846e-01
-## log_funded_amnt       0.000000e+00 -2.460932e-01
-## pub_rec               3.390816e-02  5.997252e-02
-## emp_length_10         0.000000e+00 -1.924941e-02
-## owner                 0.000000e+00 -2.444599e-02
-## renter               -3.882640e-02 -6.243087e-02
-## pub_rec_bankruptcies  0.000000e+00  0.000000e+00
-## revol_util            0.000000e+00  0.000000e+00
-## revol_bal             0.000000e+00  2.402268e-03
+##                              [,1]         [,2]
+## (Intercept)          -0.003183346 -0.002290639
+## delinq_2yrs           0.086457831  0.096538222
+## annual_inc            0.000000000  0.009288932
+## annual_inc2           0.000000000  0.000000000
+## log_annual_inc        0.000000000 -0.052405808
+## dti                   0.000000000 -0.021505827
+## installment           0.100715553  7.017150265
+## funded_amnt           0.000000000 -6.307245657
+## funded_amnt2          0.000000000 -0.328837450
+## log_funded_amnt       0.000000000 -0.175860616
+## pub_rec               0.000000000  0.046974246
+## emp_length_10         0.000000000 -0.020078967
+## owner                 0.000000000 -0.007930234
+## renter               -0.007220882 -0.043264994
+## pub_rec_bankruptcies  0.000000000  0.000000000
+## revol_util            0.379766899  0.249451915
+## revol_bal             0.000000000 -0.024474673
 \end{verbatim}
 
 \begin{Shaded}
@@ -2092,12 +2097,12 @@ The \texttt{glmnet} package (see \href{https://glmnet.stanford.edu/articles/glmn
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# lambda.min: lambda that gives minimum mean cross{-}validated error}
-\NormalTok{cvglmnet}\SpecialCharTok{$}\NormalTok{lambda.min }
+\NormalTok{cvglmnet}\SpecialCharTok{$}\NormalTok{lambda.min}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.004091039
+## [1] 0.004277307
 \end{verbatim}
 
 \begin{Shaded}
@@ -2108,7 +2113,7 @@ The \texttt{glmnet} package (see \href{https://glmnet.stanford.edu/articles/glmn
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.00448991
+## [1] 0.004694339
 \end{verbatim}
 
 \begin{Shaded}
@@ -2118,42 +2123,41 @@ The \texttt{glmnet} package (see \href{https://glmnet.stanford.edu/articles/glmn
 \end{Shaded}
 
 \begin{verbatim}
-## 18 x 1 sparse Matrix of class "dgCMatrix"
-##                                 s1
-## (Intercept)           1.128990e-14
-## delinq_2yrs           6.625860e-02
-## annual_inc            6.054923e-03
-## annual_inc2           .           
-## log_annual_inc       -3.795151e-02
-## dti                   2.065272e-02
-## installment           8.518961e+00
-## verification_status  -2.894435e-03
-## funded_amnt          -7.560853e+00
-## funded_amnt2         -5.041923e-01
-## log_funded_amnt      -2.537567e-01
-## pub_rec               5.804333e-02
-## emp_length_10        -1.894666e-02
-## owner                -2.484192e-02
-## renter               -6.039831e-02
-## pub_rec_bankruptcies  .           
-## revol_util            .           
-## revol_bal             3.093752e-03
+## 17 x 1 sparse Matrix of class "dgCMatrix"
+##                                s1
+## (Intercept)          -0.002262204
+## delinq_2yrs           0.093465307
+## annual_inc            0.010181514
+## annual_inc2           .          
+## log_annual_inc       -0.052917617
+## dti                  -0.022498219
+## installment           7.289164713
+## funded_amnt          -6.542070431
+## funded_amnt2         -0.359156943
+## log_funded_amnt      -0.183939650
+## pub_rec               0.045755394
+## emp_length_10        -0.019706751
+## owner                -0.008752887
+## renter               -0.042208229
+## pub_rec_bankruptcies  .          
+## revol_util            0.241530260
+## revol_bal            -0.024248623
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# predicted values of y for specific values of x:}
-\FunctionTok{predict}\NormalTok{(cvglmnet, }\AttributeTok{newx =} \FunctionTok{as.matrix}\NormalTok{(x)[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{,], }\AttributeTok{s =} \StringTok{"lambda.min"}\NormalTok{) }
+\FunctionTok{predict}\NormalTok{(cvglmnet, }\AttributeTok{newx =} \FunctionTok{as.matrix}\NormalTok{(x)[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{,], }\AttributeTok{s =} \StringTok{"lambda.min"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##        lambda.min
-## 21529  0.34496384
-## 21547 -0.04553753
-## 21579  0.56455499
-## 21583 -0.20696954
-## 21608 -0.12165356
+##       lambda.min
+## 21529  0.3218125
+## 21547 -0.1873492
+## 21579  0.6810101
+## 21583 -0.2687087
+## 21608 -0.2072584
 \end{verbatim}
 
 \hypertarget{Panel}{%
@@ -2536,10 +2540,10 @@ In this example, we want to estimate the effect of short and long-term interest 
 \NormalTok{eq1\_FE   }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(dhpreal }\SpecialCharTok{\textasciitilde{}}\NormalTok{ stir }\SpecialCharTok{+}\NormalTok{ ltrate }\SpecialCharTok{+}\NormalTok{ iso }\SpecialCharTok{+}\NormalTok{ YEAR,}\AttributeTok{data=}\NormalTok{JST)}
 \NormalTok{eq2\_noFE }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(dhpreal }\SpecialCharTok{\textasciitilde{}} \FunctionTok{I}\NormalTok{(ltrate}\SpecialCharTok{{-}}\NormalTok{stir),}\AttributeTok{data=}\NormalTok{JST)}
 \NormalTok{eq2\_FE }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(dhpreal }\SpecialCharTok{\textasciitilde{}} \FunctionTok{I}\NormalTok{(ltrate}\SpecialCharTok{{-}}\NormalTok{stir) }\SpecialCharTok{+}\NormalTok{ iso }\SpecialCharTok{+}\NormalTok{ YEAR,}\AttributeTok{data=}\NormalTok{JST)}
-\NormalTok{vcov\_cluster1\_noFE }\OtherTok{\textless{}{-}} \FunctionTok{vcovHC}\NormalTok{(eq1\_noFE, }\AttributeTok{cluster =}\NormalTok{ JST[, }\FunctionTok{c}\NormalTok{(}\StringTok{"iso"}\NormalTok{,}\StringTok{"YEAR"}\NormalTok{)])}
-\NormalTok{vcov\_cluster1\_FE   }\OtherTok{\textless{}{-}} \FunctionTok{vcovHC}\NormalTok{(eq1\_FE, }\AttributeTok{cluster =}\NormalTok{ JST[, }\FunctionTok{c}\NormalTok{(}\StringTok{"iso"}\NormalTok{,}\StringTok{"YEAR"}\NormalTok{)])}
-\NormalTok{vcov\_cluster2\_noFE }\OtherTok{\textless{}{-}} \FunctionTok{vcovHC}\NormalTok{(eq2\_noFE, }\AttributeTok{cluster =}\NormalTok{ JST[, }\FunctionTok{c}\NormalTok{(}\StringTok{"iso"}\NormalTok{,}\StringTok{"YEAR"}\NormalTok{)])}
-\NormalTok{vcov\_cluster2\_FE   }\OtherTok{\textless{}{-}} \FunctionTok{vcovHC}\NormalTok{(eq2\_FE, }\AttributeTok{cluster =}\NormalTok{ JST[, }\FunctionTok{c}\NormalTok{(}\StringTok{"iso"}\NormalTok{,}\StringTok{"YEAR"}\NormalTok{)])}
+\NormalTok{vcov\_cluster1\_noFE }\OtherTok{\textless{}{-}} \FunctionTok{vcovCL}\NormalTok{(eq1\_noFE, }\AttributeTok{cluster =}\NormalTok{ JST[, }\FunctionTok{c}\NormalTok{(}\StringTok{"iso"}\NormalTok{,}\StringTok{"YEAR"}\NormalTok{)])}
+\NormalTok{vcov\_cluster1\_FE   }\OtherTok{\textless{}{-}} \FunctionTok{vcovCL}\NormalTok{(eq1\_FE, }\AttributeTok{cluster =}\NormalTok{ JST[, }\FunctionTok{c}\NormalTok{(}\StringTok{"iso"}\NormalTok{,}\StringTok{"YEAR"}\NormalTok{)])}
+\NormalTok{vcov\_cluster2\_noFE }\OtherTok{\textless{}{-}} \FunctionTok{vcovCL}\NormalTok{(eq2\_noFE, }\AttributeTok{cluster =}\NormalTok{ JST[, }\FunctionTok{c}\NormalTok{(}\StringTok{"iso"}\NormalTok{,}\StringTok{"YEAR"}\NormalTok{)])}
+\NormalTok{vcov\_cluster2\_FE   }\OtherTok{\textless{}{-}} \FunctionTok{vcovCL}\NormalTok{(eq2\_FE, }\AttributeTok{cluster =}\NormalTok{ JST[, }\FunctionTok{c}\NormalTok{(}\StringTok{"iso"}\NormalTok{,}\StringTok{"YEAR"}\NormalTok{)])}
 \NormalTok{robust\_se\_FE1\_noFE }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{diag}\NormalTok{(vcov\_cluster1\_noFE))}
 \NormalTok{robust\_se\_FE1\_FE   }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{diag}\NormalTok{(vcov\_cluster1\_FE))}
 \NormalTok{robust\_se\_FE2\_noFE }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{diag}\NormalTok{(vcov\_cluster2\_noFE))}
@@ -2556,28 +2560,28 @@ In this example, we want to estimate the effect of short and long-term interest 
 
 \begin{verbatim}
 ## 
-## =======================================================
-##                           Dependent variable:          
-##                  --------------------------------------
-##                                 dhpreal                
-##                    no FE   with FE    no FE    with FE 
-##                     (1)      (2)       (3)       (4)   
-## -------------------------------------------------------
-## stir             0.485***  0.532***                    
-##                   (0.149)  (0.170)                     
-##                                                        
-## ltrate           -0.690*** -0.384**                    
-##                   (0.164)  (0.182)                     
-##                                                        
-## I(ltrate - stir)                    -0.476*** -0.475***
-##                                      (0.145)   (0.159) 
-##                                                        
-## -------------------------------------------------------
-## Country FE          No       Yes       No        Yes   
-## Year FE             No       Yes       No        Yes   
-## Observations       1,141    1,141     1,141     1,141  
-## =======================================================
-## Note:                       *p<0.1; **p<0.05; ***p<0.01
+## ==================================================
+##                         Dependent variable:       
+##                  ---------------------------------
+##                               dhpreal             
+##                   no FE   with FE  no FE  with FE 
+##                    (1)      (2)     (3)     (4)   
+## --------------------------------------------------
+## stir              0.485*  0.532**                 
+##                  (0.271)  (0.240)                 
+##                                                   
+## ltrate           -0.690** -0.384*                 
+##                  (0.269)  (0.200)                 
+##                                                   
+## I(ltrate - stir)                  -0.476* -0.475**
+##                                   (0.255) (0.213) 
+##                                                   
+## --------------------------------------------------
+## Country FE          No      Yes     No      Yes   
+## Year FE             No      Yes     No      Yes   
+## Observations      1,141    1,141   1,141   1,141  
+## ==================================================
+## Note:                  *p<0.1; **p<0.05; ***p<0.01
 \end{verbatim}
 
 \end{example}
@@ -2942,7 +2946,7 @@ The \texttt{pdynmc} package allows to run these GMM approaches (see \citet{Frits
 \begin{verbatim}
 ## 
 ## Dynamic linear panel estimation (onestep)
-## Estimation steps: 1
+## GMM estimation steps: 1
 ## 
 ## Coefficients:
 ##             Estimate Std.Err.rob z-value.rob Pr(>|z.rob|)    
@@ -3387,7 +3391,7 @@ Specifically, the number of restrictions is \(n_R \times n_z\). Let us implement
 \NormalTok{\}}
 \NormalTok{vix }\OtherTok{\textless{}{-}} \FunctionTok{f}\NormalTok{(}\StringTok{"VIXCLS"}\NormalTok{) }\CommentTok{\# VIX}
 \NormalTok{pce }\OtherTok{\textless{}{-}} \FunctionTok{f}\NormalTok{(}\StringTok{"PCE"}\NormalTok{) }\CommentTok{\# Personal consumption expenditures}
-\NormalTok{sto }\OtherTok{\textless{}{-}} \FunctionTok{f}\NormalTok{(}\StringTok{"WILL5000PRFC"}\NormalTok{) }\CommentTok{\# Wilshire 5000 Full Cap Price Index}
+\NormalTok{sto }\OtherTok{\textless{}{-}} \FunctionTok{f}\NormalTok{(}\StringTok{"SPASTT01USM661N"}\NormalTok{) }\CommentTok{\# Stock price index}
 \NormalTok{bdr }\OtherTok{\textless{}{-}} \FunctionTok{f}\NormalTok{(}\StringTok{"BAMLCC0A4BBBTRIV"}\NormalTok{) }\CommentTok{\# ICE BofA BBB US Corp. Index Tot. Return}
 \NormalTok{T }\OtherTok{\textless{}{-}} \FunctionTok{dim}\NormalTok{(vix)[}\DecValTok{1}\NormalTok{]}
 \NormalTok{dvix }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(vix}\SpecialCharTok{$}\NormalTok{value[}\DecValTok{3}\SpecialCharTok{:}\NormalTok{T]}\SpecialCharTok{/}\NormalTok{vix}\SpecialCharTok{$}\NormalTok{value[}\DecValTok{2}\SpecialCharTok{:}\NormalTok{(T}\DecValTok{{-}1}\NormalTok{)]) }\CommentTok{\# change in VIX t+1}
@@ -3469,9 +3473,9 @@ Finally, let's compute the standard deviation of the parameter estimates, using 
 \end{Shaded}
 
 \begin{verbatim}
-##            theta    std.dev     t.stud
-## [1,]  -0.7180716  0.4646617 -1.5453642
-## [2,] -11.2042452 17.1039449 -0.6550679
+##           theta    std.dev    t.stud
+## [1,]  -1.352152  0.9725812 -1.390272
+## [2,] -80.373739 48.2598742 -1.665436
 \end{verbatim}
 
 The Hansen statistic can be used to test the model (see Eq. \eqref{eq:HansenSargan}). If the model is correct, we have:
@@ -3491,7 +3495,7 @@ where \(J\) is the number of moment constraints (\(n_z \times n_r\) here) and \(
 
 \begin{verbatim}
 ##           [,1]
-## [1,] 0.8789782
+## [1,] 0.3133884
 \end{verbatim}
 
 \hypertarget{secMLE}{%
@@ -4351,7 +4355,7 @@ Except for its last row (LPM case), Table \ref{tab:foo} provides examples of fun
   >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3571}}
   >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4286}}@{}}
 \caption{\label{tab:foo} This table provides examples of function \(g\), s.t. \(\mathbb{P}(y_i=1|\mathbf{x}_i;\boldsymbol heta) = g(\boldsymbol\theta'\mathbf{x}_i)\). The LPM case (last row) is given for comparison but, again, it does not satisfy \(g(\boldsymbol\theta'\mathbf{x}_i) \in [0,1]\) for any value of \(\boldsymbol\theta'\mathbf{x}_i\).}\tabularnewline
-\toprule()
+\toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Model
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
@@ -4359,9 +4363,9 @@ Function \(g\)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
 Derivative
 \end{minipage} \\
-\midrule()
+\midrule\noalign{}
 \endfirsthead
-\toprule()
+\toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Model
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
@@ -4369,13 +4373,14 @@ Function \(g\)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
 Derivative
 \end{minipage} \\
-\midrule()
+\midrule\noalign{}
 \endhead
+\bottomrule\noalign{}
+\endlastfoot
 Probit & \(\Phi\) & \(\phi\) \\
 Logit & \(\dfrac{\exp(x)}{1+\exp(x)}\) & \(\dfrac{\exp(x)}{(1+\exp(x))^2}\) \\
 log-log & \(1 - \exp(-\exp(x))\) & \(\exp(-\exp(x))\exp(x)\) \\
 linear (LPM) & \(x\) & 1 \\
-\bottomrule()
 \end{longtable}
 
 Figure \ref{fig:ProbLogit} displays the first three \(g\) functions appearing in Table \ref{tab:foo}.
@@ -6285,7 +6290,7 @@ Finally, we compare average model-implied probabilities with the frequencies obs
 ## [2,] 0.1220592 0.22303277 0.2271621 0.17173478 0.10888940 0.06244353
 ## [3,] 0.3486824 0.18846395 0.1219340 0.08385899 0.05968603 0.04350209
 ## [4,] 0.3124319 0.06056959 0.1083120 0.13262624 0.12553899 0.09847017
-## [5,] 0.3124684 0.06053026 0.1082799 0.13262562 0.12556531 0.09850218
+## [5,] 0.3124687 0.06053019 0.1082797 0.13262552 0.12556525 0.09850216
 \end{verbatim}
 
 \end{example}
@@ -6344,7 +6349,7 @@ If \(M \in \mathbb{R}^{m \times n}\), then its Moore-Penrose pseudo inverse (exi
 \end{definition}
 
 \begin{proposition}[Properties of the Moore-Penrose inverse]
-\protect\hypertarget{prp:MoorPenrose}{}\label{prp:MoorPenrose}
+\protect\hypertarget{prp:MoorPenrose}{}\label{prp:MoorPenrose}\leavevmode
 
 \begin{itemize}
 \tightlist
@@ -6579,7 +6584,7 @@ We have \(\mathbb{E}(Z)=\nu\). (See Table \ref{tab:Chi2} for quantiles.)
 \end{definition}
 
 \begin{definition}[Cauchy distribution]
-\protect\hypertarget{def:Cauchy}{}\label{def:Cauchy}
+\protect\hypertarget{def:Cauchy}{}\label{def:Cauchy}\leavevmode
 
 The probability distribution function of the Cauchy distribution defined by a location parameter \(\mu\) and a scale parameter \(\gamma\) is:
 \[

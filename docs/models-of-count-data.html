@@ -7,7 +7,7 @@
 <title>Chapter 7 Models of Count Data | Micro-Econometrics</title>
 <meta name="author" content="Jean-Paul Renne">
 <meta name="description" content="Count-data models aim at explaining dependent variables \(y_i\) that take integer values. Typically, one may want to account for the number of doctor visits, of customers, of hospital stays, of...">
-<meta name="generator" content="bookdown 0.27 with bs4_book()">
+<meta name="generator" content="bookdown 0.34 with bs4_book()">
 <meta property="og:title" content="Chapter 7 Models of Count Data | Micro-Econometrics">
 <meta property="og:type" content="book">
 <meta property="og:description" content="Count-data models aim at explaining dependent variables \(y_i\) that take integer values. Typically, one may want to account for the number of doctor visits, of customers, of hospital stays, of...">
@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="Count-data models aim at explaining dependent variables \(y_i\) that take integer values. Typically, one may want to account for the number of doctor visits, of customers, of hospital stays, of...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.0/transition.js"></script><script src="libs/bs3compat-0.4.0/tabs.js"></script><script src="libs/bs3compat-0.4.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.5.0/transition.js"></script><script src="libs/bs3compat-0.5.0/tabs.js"></script><script src="libs/bs3compat-0.5.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
@@ -86,7 +86,7 @@
 <h1>
 <span class="header-section-number">7</span> Models of Count Data<a class="anchor" aria-label="anchor" href="#models-of-count-data"><i class="fas fa-link"></i></a>
 </h1>
-<p>Count-data models aim at explaining dependent variables <span class="math inline">\(y_i\)</span> that take integer values. Typically, one may want to account for the number of doctor visits, of customers, of hospital stays, of borrowers’ defaults, of recreational trips, of accidents. Quite often, these data feature large proportion of zeros (see, e.g., Table 20.1 in <span class="citation">Cameron and Trivedi (<a href="references.html#ref-Cameron_Trivedi_2005" role="doc-biblioref">2005</a>)</span>), and/or are skewed to the right.</p>
+<p>Count-data models aim at explaining dependent variables <span class="math inline">\(y_i\)</span> that take integer values. Typically, one may want to account for the number of doctor visits, of customers, of hospital stays, of borrowers’ defaults, of recreational trips, of accidents. Quite often, these data feature large proportion of zeros (see, e.g., Table 20.1 in <span class="citation">Cameron and Trivedi (<a href="references.html#ref-Cameron_Trivedi_2005">2005</a>)</span>), and/or are skewed to the right.</p>
 <div id="poisson-model" class="section level2" number="7.1">
 <h2>
 <span class="header-section-number">7.1</span> Poisson model<a class="anchor" aria-label="anchor" href="#poisson-model"><i class="fas fa-link"></i></a>
@@ -171,11 +171,11 @@ The previous expression is the basis of the so-called <strong>NB2</strong> speci
 \mathbb{V}ar(y|\mathbf{x}) = \mu(1+\gamma).
 \]</span></p>
 <div class="example">
-<p><span id="exm:Doctorvisits" class="example"><strong>Example 7.1  (Number of doctor visits) </strong></span>The following example compares different specifications, namely a linear regression model, a Poisson model, and a NB model, to account for the number of doctor visits. The dataset (`<code>randdata</code>) is the one used in Chapter 20 of <span class="citation">Cameron and Trivedi (<a href="references.html#ref-Cameron_Trivedi_2005" role="doc-biblioref">2005</a>)</span> (available on <a href="http://cameron.econ.ucdavis.edu/mmabook/mmadata.html">that page</a>).</p>
+<p><span id="exm:Doctorvisits" class="example"><strong>Example 7.1  (Number of doctor visits) </strong></span>The following example compares different specifications, namely a linear regression model, a Poisson model, and a NB model, to account for the number of doctor visits. The dataset (`<code>randdata</code>) is the one used in Chapter 20 of <span class="citation">Cameron and Trivedi (<a href="references.html#ref-Cameron_Trivedi_2005">2005</a>)</span> (available on <a href="http://cameron.econ.ucdavis.edu/mmabook/mmadata.html">that page</a>).</p>
 <div class="sourceCode" id="cb131"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">AEC</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">COUNT</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/atahk/pscl">pscl</a></span><span class="op">)</span> <span class="co"># for predprob function and hurdle model</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/atahk/pscl">pscl</a></span><span class="op">)</span> <span class="co"># for predprob function and hurdle model</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>plt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.15</span>,<span class="fl">.95</span>,<span class="fl">.1</span>,<span class="fl">.95</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">randdata</span><span class="op">$</span><span class="va">mdvis</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="figure" style="text-align: left-aligned">
@@ -410,7 +410,7 @@ Typically, <span class="math inline">\(f_1\)</span> corresponds to a logit model
 ## [2,] 0.1220592 0.22303277 0.2271621 0.17173478 0.10888940 0.06244353
 ## [3,] 0.3486824 0.18846395 0.1219340 0.08385899 0.05968603 0.04350209
 ## [4,] 0.3124319 0.06056959 0.1083120 0.13262624 0.12553899 0.09847017
-## [5,] 0.3124684 0.06053026 0.1082799 0.13262562 0.12556531 0.09850218</code></pre>
+## [5,] 0.3124687 0.06053019 0.1082797 0.13262552 0.12556525 0.09850216</code></pre>
 </div>
 
 </div>
@@ -442,7 +442,7 @@ Typically, <span class="math inline">\(f_1\)</span> corresponds to a logit model
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Micro-Econometrics</strong>" was written by Jean-Paul Renne. It was last built on 2023-04-23.</p>
+    <p>"<strong>Micro-Econometrics</strong>" was written by Jean-Paul Renne. It was last built on 2025-02-13.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
@@ -455,7 +455,7 @@ Typically, <span class="math inline">\(f_1\)</span> corresponds to a logit model
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

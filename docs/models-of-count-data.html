@@ -172,7 +172,7 @@ The previous expression is the basis of the so-called <strong>NB2</strong> speci
 \]</span></p>
 <div class="example">
 <p><span id="exm:Doctorvisits" class="example"><strong>Example 7.1  (Number of doctor visits) </strong></span>The following example compares different specifications, namely a linear regression model, a Poisson model, and a NB model, to account for the number of doctor visits. The dataset (`<code>randdata</code>) is the one used in Chapter 20 of <span class="citation">Cameron and Trivedi (<a href="references.html#ref-Cameron_Trivedi_2005">2005</a>)</span> (available on <a href="http://cameron.econ.ucdavis.edu/mmabook/mmadata.html">that page</a>).</p>
-<div class="sourceCode" id="cb131"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb133"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">AEC</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">COUNT</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/atahk/pscl">pscl</a></span><span class="op">)</span> <span class="co"># for predprob function and hurdle model</span></span>
@@ -184,11 +184,11 @@ The previous expression is the basis of the so-called <strong>NB2</strong> speci
 Figure 7.1: Distribution of the number of doctor visits.
 </p>
 </div>
-<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">randdata</span><span class="op">$</span><span class="va">mdvis</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">randdata</span><span class="op">$</span><span class="va">mdvis</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1]  2.860426 20.289300</code></pre>
 <p>As shown on the previous line, the variance of the number of visits is much larger than its expectation. This suggests that a Poisson model would be misspecified.</p>
-<div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">randdata</span><span class="op">$</span><span class="va">LC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">randdata</span><span class="op">$</span><span class="va">coins</span><span class="op">)</span></span>
 <span><span class="va">model.OLS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mdvis</span> <span class="op">~</span> <span class="va">LC</span> <span class="op">+</span> <span class="va">idp</span> <span class="op">+</span> <span class="va">lpi</span> <span class="op">+</span> <span class="va">fmde</span> <span class="op">+</span> <span class="va">physlm</span> <span class="op">+</span> <span class="va">disea</span> <span class="op">+</span> <span class="va">hlthg</span> <span class="op">+</span> </span>
 <span>                  <span class="va">hlthf</span> <span class="op">+</span> <span class="va">hlthp</span> <span class="op">-</span> <span class="fl">1</span>,data<span class="op">=</span><span class="va">randdata</span><span class="op">)</span></span>
@@ -242,14 +242,14 @@ Figure 7.1: Distribution of the number of doctor visits.
 ## Note:                                         *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 <p>In the previous table, The reported <span class="math inline">\(\theta\)</span> is the inverse of <span class="math inline">\(\alpha\)</span> appearing in <span class="math inline">\(\mathbb{V}ar(y|\mathbf{x}) = \mu+\alpha \mu^2\)</span> (NB2 specification). That is, the model implies that <span class="math inline">\(\mathbb{V}ar(y|\mathbf{x}) = \mu+\mu^2/\theta\)</span>.</p>
 <p>Models’ predictions can be obtained as follows:</p>
-<div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb138"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># prediction of beta'x, equivalent to "model.poisson$fitted.values":</span></span>
 <span><span class="va">predict_poisson.beta.x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model.poisson</span><span class="op">)</span></span>
 <span><span class="co"># prediction of the number of events (exp(beta'x)):</span></span>
 <span><span class="va">predict_poisson</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model.poisson</span>,type<span class="op">=</span><span class="st">"response"</span><span class="op">)</span></span>
 <span><span class="va">predict_NB</span> <span class="op">&lt;-</span> <span class="va">model.neg.bin</span><span class="op">$</span><span class="va">fitted.values</span></span></code></pre></div>
 <p>Let us now compute the model-implied probabilities, and let’s compare them with the frequencies observed in the data.</p>
-<div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prop.table.data</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proportions.html">prop.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">randdata</span><span class="op">$</span><span class="va">mdvis</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">predprob.poisson</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pscl/man/predprob.html">predprob</a></span><span class="op">(</span><span class="va">model.poisson</span><span class="op">)</span> <span class="co"># part of pscl package</span></span>
 <span><span class="va">predprob.nb</span>      <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pscl/man/predprob.html">predprob</a></span><span class="op">(</span><span class="va">model.neg.bin</span><span class="op">)</span></span>
@@ -299,7 +299,7 @@ Typically, <span class="math inline">\(f_1\)</span> corresponds to a logit model
 <div class="example">
 <p><span id="exm:Doctorvisits2" class="example"><strong>Example 7.2  (Number of doctor visits) </strong></span>Let us come back to the data used in Example <a href="models-of-count-data.html#exm:Doctorvisits">7.1</a>, and estimate Hurdle and a zero-inflation models:</p>
 <!-- # See Subsection 2.2 of https://cran.r-project.org/web/packages/pscl/vignettes/countreg.pdf -->
-<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">stargazer</span><span class="op">)</span></span>
 <span><span class="va">model.hurdle</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/pscl/man/hurdle.html">hurdle</a></span><span class="op">(</span><span class="va">mdvis</span> <span class="op">~</span> <span class="va">LC</span> <span class="op">+</span> <span class="va">idp</span> <span class="op">+</span> <span class="va">lpi</span> <span class="op">+</span> <span class="va">fmde</span> <span class="op">+</span> <span class="va">physlm</span> <span class="op">+</span> <span class="va">disea</span> <span class="op">+</span> <span class="va">hlthg</span> <span class="op">+</span> <span class="va">hlthf</span> <span class="op">+</span> </span>
@@ -344,7 +344,7 @@ Typically, <span class="math inline">\(f_1\)</span> corresponds to a logit model
 ## Log Likelihood  -54,772.100    -54,772.550 
 ## ===========================================
 ## Note:           *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
-<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/stargazer/man/stargazer.html">stargazer</a></span><span class="op">(</span><span class="va">model.hurdle</span>,<span class="va">model.zeroinfl</span>,zero.component<span class="op">=</span><span class="cn">TRUE</span>,</span>
 <span>          no.space<span class="op">=</span><span class="cn">TRUE</span>,type<span class="op">=</span><span class="st">"text"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## 
@@ -382,7 +382,7 @@ Typically, <span class="math inline">\(f_1\)</span> corresponds to a logit model
 ## ===========================================
 ## Note:           *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 <p>Let us test the importance of <code>LC</code> in the model using a Wald test:</p>
-<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Test whether LC is important in the model:</span></span>
 <span><span class="va">model.hurdle.reduced</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/update.html">update</a></span><span class="op">(</span><span class="va">model.hurdle</span>,<span class="va">.</span><span class="op">~</span><span class="va">.</span><span class="op">-</span><span class="va">LC</span><span class="op">)</span></span>
 <span><span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/waldtest.html">waldtest</a></span><span class="op">(</span><span class="va">model.hurdle</span>, <span class="va">model.hurdle.reduced</span><span class="op">)</span></span></code></pre></div>
@@ -397,7 +397,7 @@ Typically, <span class="math inline">\(f_1\)</span> corresponds to a logit model
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p>Finally, we compare average model-implied probabilities with the frequencies observed in the data:</p>
-<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">predprob.hurdle</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pscl/man/predprob.html">predprob</a></span><span class="op">(</span><span class="va">model.hurdle</span><span class="op">)</span></span>
 <span><span class="va">predprob.zeroinfl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pscl/man/predprob.html">predprob</a></span><span class="op">(</span><span class="va">model.zeroinfl</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">prop.table.data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>,</span>
@@ -442,7 +442,7 @@ Typically, <span class="math inline">\(f_1\)</span> corresponds to a logit model
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Micro-Econometrics</strong>" was written by Jean-Paul Renne. It was last built on 2025-02-13.</p>
+    <p>"<strong>Micro-Econometrics</strong>" was written by Jean-Paul Renne. It was last built on 2025-02-16.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

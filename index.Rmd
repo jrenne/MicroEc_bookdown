@@ -23,7 +23,7 @@ css: "my-style.css"
 
 In microeconometric models, the variables of interest often feature restricted distributions---for instance with discontinuous support---, which necessitates specific models. Typical examples are discrete-choice models (binary, multinomial, ordered outcomes), sample selection models (censored or truncated outcomes), and count-data models (integer outcomes). The course describes the estimation and interpretation of these models. It also shows how the discrete-choice models can emerge from (structural) random-utility frameworks.
 
-This course has been developed by [Jean-Paul Renne](https://sites.google.com/site/jeanpaulrenne/home). It is illustrated by R codes using various packages that can be obtained from [CRAN](https://cran.r-project.org). This `AEC` package is available on GitHub. To install it, one need to employ the `devtools` library:
+This course has been developed by [Jean-Paul Renne](https://www.jprenne.com). It is illustrated by R codes using various packages that can be obtained from [CRAN](https://cran.r-project.org). This `AEC` package is available on GitHub. To install it, one need to employ the `devtools` library:
 
 ```{r installAEC, eval=FALSE}
 install.packages("devtools") # in case this library has not been loaded yet

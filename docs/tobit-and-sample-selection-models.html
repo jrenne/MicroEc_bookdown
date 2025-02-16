@@ -249,7 +249,7 @@ where “Conditional mean” comes from Eq. <a href="tobit-and-sample-selection-
 <p>This approach is also applied to the case of <strong>sample selection models</strong> (Section <a href="tobit-and-sample-selection-models.html#SSM">6.2</a>).</p>
 <div class="example">
 <p><span id="exm:WageMroz1" class="example"><strong>Example 6.1  (Wage prediction) </strong></span>The present example is based on the dataset used in <span class="citation">Mroz (<a href="references.html#ref-Mroz_1987">1987</a>)</span> (whicht is part of the <code>sampleSelection</code> package).</p>
-<div class="sourceCode" id="cb125"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb127"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.sampleSelection.org">sampleSelection</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">AER</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"Mroz87"</span><span class="op">)</span></span>
@@ -450,7 +450,7 @@ and, finally:
 <p>The Heckman procedure is computationally simple. Although computational costs are no longer an issue, the two-step solution allows certain generalisations more easily than ML, and is more robust in certain circumstances. The computation of parameter standard errors is fairly complicated because of the two steps (see <span class="citation">Cameron and Trivedi (<a href="references.html#ref-Cameron_Trivedi_2005">2005</a>)</span>, Subsection 16.10.2). Bootstrap can be resorted to.</p>
 <div class="example">
 <p><span id="exm:WageSample" class="example"><strong>Example 6.2  (Wage prediction) </strong></span>As in Example <a href="tobit-and-sample-selection-models.html#exm:WageMroz1">6.1</a>, let us use the <span class="citation">Mroz (<a href="references.html#ref-Mroz_1987">1987</a>)</span> dataset again, with the objective of explaining wage setting.</p>
-<div class="sourceCode" id="cb127"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.sampleSelection.org">sampleSelection</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">AER</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"Mroz87"</span><span class="op">)</span></span>
@@ -507,7 +507,7 @@ and, finally:
 ## Inverse Mills Ratio                     0.012 (0.152)              
 ## ===================================================================
 ## Note:                                   *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
-<div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb131"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Print outcome-equation estimates:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/stargazer/man/stargazer.html">stargazer</a></span><span class="op">(</span><span class="va">ols1</span>,<span class="va">heckvan</span>,<span class="va">ml</span>,type <span class="op">=</span> <span class="st">"text"</span>,no.space <span class="op">=</span> <span class="cn">TRUE</span>,omit.stat <span class="op">=</span> <span class="st">"f"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## 
@@ -569,7 +569,7 @@ and, finally:
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Micro-Econometrics</strong>" was written by Jean-Paul Renne. It was last built on 2025-02-13.</p>
+    <p>"<strong>Micro-Econometrics</strong>" was written by Jean-Paul Renne. It was last built on 2025-02-16.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

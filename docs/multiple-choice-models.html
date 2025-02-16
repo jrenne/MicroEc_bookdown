@@ -144,7 +144,7 @@ Hence the sign of <span class="math inline">\(\theta_k\)</span> indicates whethe
 Therefore the signs of the components of <span class="math inline">\(\boldsymbol\theta\)</span> are not necessarily those of the marginal effects. (For the sign of <span class="math inline">\(A\)</span> is a priori unknown.)</p>
 <div class="example">
 <p><span id="exm:orderedCredit" class="example"><strong>Example 5.1  (Predicting credit ratings (Lending-club dataset)) </strong></span>Let us use credit dataset again (see Example <a href="binary-choice-models.html#exm:creditProbit">4.3</a>), and let use try and model the ratings attributed by the lending-club:</p>
-<div class="sourceCode" id="cb118"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">AEC</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">MASS</a></span><span class="op">)</span></span>
 <span><span class="va">credit</span><span class="op">$</span><span class="va">emp_length_low5y</span>   <span class="op">&lt;-</span> <span class="va">credit</span><span class="op">$</span><span class="va">emp_length</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span></span>
@@ -193,7 +193,7 @@ Therefore the signs of the components of <span class="math inline">\(\boldsymbol
 ## ===============================================
 ## Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
 <p>Predicted ratings (and probabilties of being given a given rating) can be computed as follows:</p>
-<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pred.grade</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model1</span>,newdata <span class="op">=</span> <span class="va">training</span><span class="op">)</span></span>
 <span><span class="co"># pred.grade = predicted grade, defined as the most likely according model</span></span>
 <span><span class="va">pred.proba</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model1</span>,newdata <span class="op">=</span> <span class="va">training</span>, type<span class="op">=</span><span class="st">"probs"</span><span class="op">)</span></span></code></pre></div>
@@ -254,7 +254,7 @@ i.e., we have <span class="math inline">\(\boldsymbol\beta=\theta^{(u)}_{1,1}=\d
 </ul>
 <div class="example">
 <p><span id="exm:FishingGeneralLogit" class="example"><strong>Example 5.2  (CL and MNL with the fishing-mode dataset) </strong></span>The following lines replicate Table 15.2 in <span class="citation">Cameron and Trivedi (<a href="references.html#ref-Cameron_Trivedi_2005">2005</a>)</span> (see also Examples <a href="binary-choice-models.html#exm:FishingTable">4.2</a> and <a href="binary-choice-models.html#exm:Fisch142">4.4</a>):</p>
-<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Specify data organization:</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://cran.r-project.org/package=mlogit">mlogit</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">stargazer</span><span class="op">)</span></span>
@@ -489,7 +489,7 @@ i.e. we have IIA in nest <span class="math inline">\(j\)</span>.</p>
 which depends on the expected utilities of all alternatives in nest <span class="math inline">\(j_A\)</span> and <span class="math inline">\(j_B\)</span>. So the IIA does not hold.</p>
 <div class="example">
 <p><span id="exm:nestedTravel" class="example"><strong>Example 5.4  (Travel-mode dataset) </strong></span>Let us illustrate nested logits on the travel-mode dataset used, e.g., by <span class="citation">Hensher and Greene (<a href="references.html#ref-Hensher_Greene_2002">2002</a>)</span> (see also <span class="citation">Heiss (<a href="references.html#ref-Heiss_2002">2002</a>)</span>).</p>
-<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb125"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://cran.r-project.org/package=mlogit">mlogit</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">stargazer</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"TravelMode"</span>, package <span class="op">=</span> <span class="st">"AER"</span><span class="op">)</span></span>
@@ -581,7 +581,7 @@ which depends on the expected utilities of all alternatives in nest <span class=
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Micro-Econometrics</strong>" was written by Jean-Paul Renne. It was last built on 2025-02-13.</p>
+    <p>"<strong>Micro-Econometrics</strong>" was written by Jean-Paul Renne. It was last built on 2025-02-16.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

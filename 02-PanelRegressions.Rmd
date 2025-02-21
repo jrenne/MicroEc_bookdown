@@ -496,6 +496,23 @@ phtest(eq.FE,eq.RE)
 ```
 The p-value being high, we do not reject the null hypothesis according to which the covariates and the errors are uncorrelated. We should therefore prefer the random-effect model.
 
+To apply cluster-corrected standard errors for the outputs of the \texttt{plm} package (see Section \@ref(Clusters)), follow these steps:
+
+```{r JSTpanel200, warning=FALSE,message=FALSE}
+vcov_RE <- plm::vcovHC(eq.RE,
+                       cluster = c('group') # use 'group' or 'time'
+                       )
+robust_se_RE <- sqrt(diag(vcov_RE))
+vcov_FE <- plm::vcovHC(eq.FE,cluster = c('group'))
+robust_se_FE <- sqrt(diag(vcov_FE))
+vcov0   <- plm::vcovHC(eq0,cluster = c('group'))
+robust_se_0  <- sqrt(diag(vcov0))
+stargazer(eq0, eq.RE, eq.FE, type = "text",no.space = TRUE,
+                     column.labels=c("Pooled","Random Effect","Fixed Effects"),
+                     omit.stat=c("f","ser"),
+          se = list(robust_se_0,robust_se_RE,robust_se_FE))
+```
+
 
 
 :::{.example #airbnb name="Spatial data"}

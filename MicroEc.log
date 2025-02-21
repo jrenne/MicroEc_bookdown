@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2024.4.17)  16 FEB 2025 12:12
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2024.4.17)  21 FEB 2025 10:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -936,28 +936,29 @@ File: MicroEc_files/figure-latex/simulPanel-1.pdf Graphic file (type pdf)
 <use MicroEc_files/figure-latex/simulPanel-1.pdf>
 File: MicroEc_files/figure-latex/cigarettes-1.pdf Graphic file (type pdf)
 <use MicroEc_files/figure-latex/cigarettes-1.pdf>
-[54] [55] [56] [57] [58] [59] [60] [61] [62] [63]
+[54] [55] [56] [57] [58] [59] [60] [61] [62] [63] [64]
 File: MicroEc_files/figure-latex/airbnb-1.pdf Graphic file (type pdf)
 <use MicroEc_files/figure-latex/airbnb-1.pdf>
-[64] [65]
+[65]
 File: MicroEc_files/figure-latex/airbnb3-1.pdf Graphic file (type pdf)
 <use MicroEc_files/figure-latex/airbnb3-1.pdf>
-
-Underfull \vbox (badness 3942) has occurred while \output is active []
-
 [66] [67]
 File: MicroEc_files/figure-latex/dynpanel1-1.pdf Graphic file (type pdf)
 <use MicroEc_files/figure-latex/dynpanel1-1.pdf>
-[68] [69] [70] [71] [72] [73] [74]
+[68]
+Underfull \vbox (badness 4954) has occurred while \output is active []
+
+[69] [70] [71] [72] [73] [74]
 File: images/Abadie_et_al_2018.pdf Graphic file (type pdf)
 <use images/Abadie_et_al_2018.pdf>
+[75]
 File: images/Figure_Meyer_et_al.pdf Graphic file (type pdf)
 <use images/Figure_Meyer_et_al.pdf>
-[75] [76] [77] [78
-
-]
+[76] [77] [78]
 Chapter 3.
-[79] [80] [81] [82] [83] [84]
+[79
+
+] [80] [81] [82] [83] [84]
 File: MicroEc_files/figure-latex/MLE1-1.pdf Graphic file (type pdf)
 <use MicroEc_files/figure-latex/MLE1-1.pdf>
 File: MicroEc_files/figure-latex/MLE2-1.pdf Graphic file (type pdf)
@@ -966,17 +967,17 @@ File: MicroEc_files/figure-latex/MLE2-1.pdf Graphic file (type pdf)
 File: MicroEc_files/figure-latex/MLE3-1.pdf Graphic file (type pdf)
 <use MicroEc_files/figure-latex/MLE3-1.pdf>
 [87] [88]
-Underfull \hbox (badness 1721) in paragraph at lines 3710--3711
+Underfull \hbox (badness 1721) in paragraph at lines 3752--3753
 []\TU/lmr/m/n/12 The Cauchy-Schwarz inequality implies that $[] []
  []
 
 
-Underfull \hbox (badness 4001) in paragraph at lines 3710--3711
+Underfull \hbox (badness 4001) in paragraph at lines 3752--3753
 [][][][][][][][][][][][] [][][][] [][][][][]$\TU/lmr/m/n/12 . Now, $[][][][][][][][][] [][][][] [][][] [] [][] [][][][][][][][][] [][][][] []
  []
 
 
-Overfull \hbox (20.45735pt too wide) in paragraph at lines 3710--3711
+Overfull \hbox (20.45735pt too wide) in paragraph at lines 3752--3753
 [] [][] [][][][][][][][] [][][][] [] []$ \TU/lmr/m/n/12 because $[]$ is unbiased. Therefore $[][][][][][][][][][][] [] [][][][][][][][][][] [][][][][][][][][][]$.
  []
 
@@ -988,23 +989,23 @@ File: MicroEc_files/figure-latex/smidistri-1.pdf Graphic file (type pdf)
 <use MicroEc_files/figure-latex/smidistri-1.pdf>
 [94] [95] [96]
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/b/n' will be
-(Font)              scaled to size 10.0pt on input line 4106.
+(Font)              scaled to size 10.0pt on input line 4148.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/b/n' will be
-(Font)              scaled to size 7.0pt on input line 4106.
+(Font)              scaled to size 7.0pt on input line 4148.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/b/n' will be
-(Font)              scaled to size 5.0pt on input line 4106.
+(Font)              scaled to size 5.0pt on input line 4148.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/b/n' will be
-(Font)              scaled to size 10.00092pt on input line 4106.
+(Font)              scaled to size 10.00092pt on input line 4148.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/b/n' will be
-(Font)              scaled to size 7.00064pt on input line 4106.
+(Font)              scaled to size 7.00064pt on input line 4148.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/b/n' will be
-(Font)              scaled to size 5.00046pt on input line 4106.
+(Font)              scaled to size 5.00046pt on input line 4148.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/b/n' will be
-(Font)              scaled to size 9.99893pt on input line 4106.
+(Font)              scaled to size 9.99893pt on input line 4148.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/b/n' will be
-(Font)              scaled to size 6.99925pt on input line 4106.
+(Font)              scaled to size 6.99925pt on input line 4148.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/b/n' will be
-(Font)              scaled to size 4.99947pt on input line 4106.
+(Font)              scaled to size 4.99947pt on input line 4148.
 [97] [98] [99] [100]
 File: MicroEc_files/figure-latex/MCMC1-1.pdf Graphic file (type pdf)
 <use MicroEc_files/figure-latex/MCMC1-1.pdf>
@@ -1057,12 +1058,12 @@ Chapter 6.
 File: MicroEc_files/figure-latex/tobit1-1.pdf Graphic file (type pdf)
 <use MicroEc_files/figure-latex/tobit1-1.pdf>
 [133] [134]
-Underfull \hbox (badness 2809) in paragraph at lines 5529--5530
+Underfull \hbox (badness 2809) in paragraph at lines 5571--5572
 []\TU/lmr/m/n/12 Results usually heavily rely on distributional assumptions (more than in uncen-
  []
 
 
-Underfull \hbox (badness 1365) in paragraph at lines 5529--5530
+Underfull \hbox (badness 1365) in paragraph at lines 5571--5572
 \TU/lmr/m/n/12 sored/untruncated case). The framework is easy to extend to an heteroskedastic
  []
 
@@ -1085,7 +1086,7 @@ Chapter 7.
 File: MicroEc_files/figure-latex/countdata1-1.pdf Graphic file (type pdf)
 <use MicroEc_files/figure-latex/countdata1-1.pdf>
 [151] [152] [153] [154] [155] [156]
-Overfull \hbox (6.1048pt too wide) in paragraph at lines 6311--6311
+Overfull \hbox (6.1048pt too wide) in paragraph at lines 6353--6353
 []\TU/lmtt/m/n/12 ## Model 2: mdvis ~ idp + lpi + fmde + physlm + disea + hlthg + hlthf + hlthp[] 
  []
 
@@ -1094,7 +1095,7 @@ Overfull \hbox (6.1048pt too wide) in paragraph at lines 6311--6311
 ]
 Chapter 8.
 [159] [160] [161]
-Underfull \hbox (badness 2237) in paragraph at lines 6592--6593
+Underfull \hbox (badness 2237) in paragraph at lines 6634--6635
 []$[] [] [] [][][][]$ \TU/lmr/m/n/12 is a convex function. Therefore $[][][][] [] [][][][][][][][][][][] []
  []
 
@@ -1103,10 +1104,10 @@ File: MicroEc_files/figure-latex/Cauchy-1.pdf Graphic file (type pdf)
 <use MicroEc_files/figure-latex/Cauchy-1.pdf>
 [163] [164]
 
-Package hyperref Warning: Suppressing link with empty target on input line 6761.
+Package hyperref Warning: Suppressing link with empty target on input line 6803.
 
 [165] [166]
-Overfull \hbox (31.16512pt too wide) in paragraph at lines 6832--6833
+Overfull \hbox (31.16512pt too wide) in paragraph at lines 6874--6875
 []\TU/lmr/m/n/12 Let us introduce the r.v. $[][] [][] [][][] [] [][]$. We have $[][][][][] [] [][]$.
  []
 
@@ -1115,19 +1116,19 @@ File: MicroEc_files/figure-latex/inverseMills-1.pdf Graphic file (type pdf)
 <use MicroEc_files/figure-latex/inverseMills-1.pdf>
 [168] [169] [170] [171]
 
-LaTeX Warning: Reference `(' on page 172 undefined on input line 7103.
+LaTeX Warning: Reference `(' on page 172 undefined on input line 7145.
 
 [172]
 
-LaTeX Warning: Reference `(' on page 173 undefined on input line 7118.
+LaTeX Warning: Reference `(' on page 173 undefined on input line 7160.
 
 [173]
-Overfull \hbox (7.90913pt too wide) in paragraph at lines 7183--7248
+Overfull \hbox (7.90913pt too wide) in paragraph at lines 7225--7290
  [][] 
  []
 
 
-Overfull \hbox (58.83714pt too wide) in paragraph at lines 7360--7413
+Overfull \hbox (58.83714pt too wide) in paragraph at lines 7402--7455
  [][] 
  []
 
@@ -1154,6 +1155,6 @@ Here is how much of TeX's memory you used:
  40638 multiletter control sequences out of 15000+600000
  570652 words of font info for 144 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 90i,17n,121p,1845b,618s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,17n,121p,1845b,614s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on MicroEc.pdf (181 pages).

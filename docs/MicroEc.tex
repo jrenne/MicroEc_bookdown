@@ -134,7 +134,7 @@
 
 \title{Micro-Econometrics}
 \author{Jean-Paul Renne}
-\date{2025-02-16}
+\date{2025-02-21}
 
 \usepackage{amsthm}
 \newtheorem{theorem}{Theorem}[chapter]
@@ -2768,6 +2768,48 @@ One can run an \citet{Hausman_1978} test in order to check whether or not the fi
 \end{verbatim}
 
 The p-value being high, we do not reject the null hypothesis according to which the covariates and the errors are uncorrelated. We should therefore prefer the random-effect model.
+
+To apply cluster-corrected standard errors for the outputs of the \texttt{plm} package (see Section \ref{Clusters}), follow these steps:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vcov\_RE }\OtherTok{\textless{}{-}}\NormalTok{ plm}\SpecialCharTok{::}\FunctionTok{vcovHC}\NormalTok{(eq.RE,}
+                       \AttributeTok{cluster =} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}group\textquotesingle{}}\NormalTok{) }\CommentTok{\# use \textquotesingle{}group\textquotesingle{} or \textquotesingle{}time\textquotesingle{}}
+\NormalTok{                       )}
+\NormalTok{robust\_se\_RE }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{diag}\NormalTok{(vcov\_RE))}
+\NormalTok{vcov\_FE }\OtherTok{\textless{}{-}}\NormalTok{ plm}\SpecialCharTok{::}\FunctionTok{vcovHC}\NormalTok{(eq.FE,}\AttributeTok{cluster =} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}group\textquotesingle{}}\NormalTok{))}
+\NormalTok{robust\_se\_FE }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{diag}\NormalTok{(vcov\_FE))}
+\NormalTok{vcov0   }\OtherTok{\textless{}{-}}\NormalTok{ plm}\SpecialCharTok{::}\FunctionTok{vcovHC}\NormalTok{(eq0,}\AttributeTok{cluster =} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}group\textquotesingle{}}\NormalTok{))}
+\NormalTok{robust\_se\_0  }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{diag}\NormalTok{(vcov0))}
+\FunctionTok{stargazer}\NormalTok{(eq0, eq.RE, eq.FE, }\AttributeTok{type =} \StringTok{"text"}\NormalTok{,}\AttributeTok{no.space =} \ConstantTok{TRUE}\NormalTok{,}
+                     \AttributeTok{column.labels=}\FunctionTok{c}\NormalTok{(}\StringTok{"Pooled"}\NormalTok{,}\StringTok{"Random Effect"}\NormalTok{,}\StringTok{"Fixed Effects"}\NormalTok{),}
+                     \AttributeTok{omit.stat=}\FunctionTok{c}\NormalTok{(}\StringTok{"f"}\NormalTok{,}\StringTok{"ser"}\NormalTok{),}
+          \AttributeTok{se =} \FunctionTok{list}\NormalTok{(robust\_se\_0,robust\_se\_RE,robust\_se\_FE))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## ==================================================
+##                       Dependent variable:         
+##              -------------------------------------
+##                             dhpreal               
+##               Pooled   Random Effect Fixed Effects
+##                 (1)         (2)           (3)     
+## --------------------------------------------------
+## stir          0.485**     0.456**       0.532**   
+##               (0.240)     (0.225)       (0.218)   
+## ltrate       -0.690***   -0.541**      -0.384**   
+##               (0.243)     (0.228)       (0.160)   
+## Constant     4.103***    3.341***                 
+##               (0.519)     (0.527)                 
+## --------------------------------------------------
+## Observations   1,141       1,141         1,141    
+## R2             0.027       0.024         0.015    
+## Adjusted R2    0.025       0.022        -0.067    
+## ==================================================
+## Note:                  *p<0.1; **p<0.05; ***p<0.01
+\end{verbatim}
 
 \begin{example}[Spatial data]
 \protect\hypertarget{exm:airbnb}{}\label{exm:airbnb}This example makes use of Airbnb prices (Zürich, 22 June 2017), collected from \href{http://tomslee.net/airbnb-data-collection-get-the-data}{Tom Slee's website}. The covariates are the number of bedrooms and the number of people that can be accommodated. We consider the use of district fixed effects. Figure \ref{fig:airbnb} shows the price to explain (the size of the circles is proportional to the prices). The white lines delineate the 12 districts of the city.
